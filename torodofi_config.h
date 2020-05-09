@@ -1,10 +1,10 @@
 #include <fstream>
 #include <stdio.h>
-#include <string.h>
+#include <string>
 
 using namespace std;
 
-const string format_delimiter = ": ";
+const string config_format_delimiter = ": ";
 
 struct Hotkeys {
   string switch_active_done;
@@ -25,26 +25,25 @@ protected:
   string _filename;
 
   void _ParseLine(string line) {
-    int delimiterindex = line.find(format_delimiter);
+    int delimiterindex = line.find(config_format_delimiter);
     string varname;
     string varvalue;
 
     if (delimiterindex > 0) {
       varname = line.substr(0, delimiterindex);
-      varvalue = line.substr(delimiterindex + 3, line.length() + 1);
-      if (varname == "switch_active_done") {
+      varvalue = line.substr(delimiterindex + 2, line.length() + 1);
+      if (varname == "switch_active_done")
         _hotkeys.switch_active_done = varvalue;
-      } else if (varname == "switch_task_agenda") {
+      else if (varname == "switch_task_agenda")
         _hotkeys.switch_task_agenda = varvalue;
-      } else if (varname == "add_new_task") {
+      else if (varname == "add_new_task")
         _hotkeys.add_new_task = varvalue;
-      } else if (varname == "browser") {
+      else if (varname == "browser")
         _pathset.browser = varvalue;
-      } else if (varname == "notefile") {
+      else if (varname == "notefile")
         _pathset.notefile = varvalue;
-      } else if (varname == "rofi") {
+      else if (varname == "rofi")
         _pathset.rofi = varvalue;
-      }
     }
   }
 
@@ -73,6 +72,8 @@ public:
     string filename(afilename);
     ReadFile(filename);
   }
+
+  void ReRead() { ReadFile(_filename); }
 
   Hotkeys getHotkeys() { return _hotkeys; }
   Pathset getPathset() { return _pathset; }

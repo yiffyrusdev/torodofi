@@ -5,3 +5,4 @@ add_new_task: Alt+n
 
 rofi: rofi
 browser: firefox
+notefile: example_tasks.md
