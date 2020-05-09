@@ -1,0 +1,7 @@
+switch_task_agenda: Alt+a
+switch_active_done: Alt+Tab
+add_new_task: Alt+n
+
+
+rofi: rofi
+browser: firefox
