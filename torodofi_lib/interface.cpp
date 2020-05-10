@@ -21,22 +21,23 @@ string Dialog::strCaption() {
 
 string Dialog::strTask(task::SingleTask atask) {
   string result;
-  result += atask.text + " ";
-  result += atask.expire_date + " ";
-  result += func::vectorToString(atask.tags) + " ";
-  result += func::vectorToString(atask.categories) + " ";
+  result += atask.text + "\t";
+  result += atask.expire_date + "\t";
+  result += func::vectorToString(atask.tags) + "\t";
+  result += func::vectorToString(atask.categories) + "\t";
   return result + "\n";
 }
 
 vector<string> Dialog::vecTask(vector<task::SingleTask> atasks) {
+  string alltasks = "";
   vector<string> result;
-  result.push_back("\"");
 
   for (size_t i = 0; i < atasks.size(); i++) {
-    result.push_back(strTask(atasks[i]));
+    alltasks += strTask(atasks[i]);
   }
-
+  result.push_back("\"" + func::linuxColumn(alltasks));
   result.push_back("\" | ");
+
   return result;
 }
 
@@ -77,16 +78,17 @@ void Dialog::Configure(config::Config aconfig) {
 }
 
 func::ReturnStatus Dialog::ShowMain(vector<task::SingleTask> atasks) {
-  vector<string> opt_list = vecTask(atasks);
   vector<string> rofi_list(_rofi_list);
   vector<string> rofi_opts(_rofi_opts);
+  string opt_list = func::vectorToString(vecTask(atasks));
 
-  rofi_list.insert(rofi_list.end(), opt_list.begin(), opt_list.end());
+  rofi_list.push_back(opt_list);
 
   vector<string> rofi_call(rofi_list);
   rofi_call.insert(rofi_call.end(), rofi_opts.begin(), rofi_opts.end());
   rofi_call.push_back(strPriorities(atasks));
   rofi_call.push_back(strCaption());
+  rofi_call.push_back("-dmenu -p \"todo\"");
 
   string cmd = func::vectorToString(rofi_call);
   func::ReturnStatus status = func::execCommand(cmd.c_str());

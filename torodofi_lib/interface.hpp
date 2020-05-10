@@ -13,7 +13,7 @@ using namespace std;
 namespace torodofi_lib {
 namespace interface {
 
-const string rofi_args = "-regex -tokenize -i -dmenu ";
+const string rofi_args = "-regex -tokenize -i -no-levenshtein-sort \"$@\"";
 const string pre_rofi_list = "echo -e ";
 
 const string color_accent = "<span color='#2d7ed8'>";
