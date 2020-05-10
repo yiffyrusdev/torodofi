@@ -11,6 +11,9 @@ struct ReturnStatus {
   int status;
   string content;
 };
+
+string linuxColumn(string avector, string separator = "\t");
+
 string vectorToString(vector<string> avector, string dilimiter = " ");
 vector<string> stringToVector(string astring, string delimiter = " ");
 

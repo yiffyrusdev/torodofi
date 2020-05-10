@@ -4,6 +4,16 @@ using namespace std;
 
 namespace torodofi_lib {
 namespace func {
+
+string linuxColumn(string astring, string separator) {
+  string cmd = "echo -e \"";
+  cmd += astring + "\" | column ";
+  cmd += "-s $'" + separator + "' -t";
+  ReturnStatus returnstatus = execCommand(cmd);
+
+  return returnstatus.content;
+}
+
 string vectorToString(vector<string> avector, string dilimiter) {
   string result;
   for (size_t i = 0; i < avector.size(); i++)
