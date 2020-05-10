@@ -39,7 +39,6 @@ vector<string> stringToVector(string astring, string delimiter) {
   vector<string> parsed_line;
 
   while ((pos = astring.find(delimiter)) != string::npos) {
-    printf("%s\n", astring.c_str());
     token = astring.substr(0, pos);
     parsed_line.push_back(token);
     astring.erase(0, pos + delimiter.length());
