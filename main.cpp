@@ -1,5 +1,5 @@
-#include "torodofi_lib/config.hpp"
-#include "torodofi_lib/task.hpp"
+#include "torodofi_lib/config.cpp"
+#include "torodofi_lib/task.cpp"
 
 #include <stdio.h>
 #include <string>
@@ -7,10 +7,12 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  torodofi_lib::Config config;
-  torodofi_lib::TaskContainer tasks;
+  torodofi_lib::config::ConfigParser ConfigParser;
+  torodofi_lib::config::Config Config;
+  torodofi_lib::task::TaskContainer TaskContainer;
 
-  config.ReadFile("config");
-  tasks.ReadFile(config.getPathset().notefile);
+  ConfigParser.ReadFile("config");
+  TaskContainer.ReadFile(ConfigParser.getPathset().notefile);
+  TaskContainer.DumpToFile();
   return 0;
 }
