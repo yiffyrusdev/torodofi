@@ -1,7 +1,3 @@
-#include <fstream>
-#include <stdio.h>
-#include <string>
-
 #include "config.hpp"
 
 using namespace std;
@@ -61,6 +57,7 @@ void ConfigParser::ReRead() { ReadFile(_filename); }
 
 Hotkeys ConfigParser::getHotkeys() { return _config.hotkeys; }
 Pathset ConfigParser::getPathset() { return _config.pathset; }
+Config ConfigParser::getConfig() { return _config; }
 string ConfigParser::getFilename() { return _filename; }
 } // namespace config
 } // namespace torodofi_lib

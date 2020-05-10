@@ -7,49 +7,49 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 namespace torodofi_lib {
 namespace task {
 
-const string task_format_delimiter = "* ";
-const string task_prority_delimiter = "## ";
-const string task_field_delimiter = ".,.";
+const std::string task_format_delimiter = "* ";
+const std::string task_prority_delimiter = "## ";
+const std::string task_field_delimiter = ".,.";
 
 struct SingleTask {
   int priority;
 
-  string text;
-  string creation_date;
-  string expire_date;
+  std::string text;
+  std::string creation_date;
+  std::string expire_date;
 
-  vector<string> tags;
-  vector<string> categories;
+  std::vector<std::string> tags;
+  std::vector<std::string> categories;
 };
 
 bool compareByPriority(const SingleTask &a, const SingleTask &b);
 
-string vectorToString(vector<string> avector, string dilimiter = " ");
+std::string vectorToString(std::vector<std::string> avector,
+                           std::string dilimiter = " ");
 
-vector<string> stringToVector(string astring, string delimiter);
+std::vector<std::string> stringToVector(std::string astring,
+                                        std::string delimiter);
 
 class TaskContainer {
 protected:
-  vector<SingleTask> _tasks;
-  string _filename;
+  std::vector<SingleTask> _tasks;
+  std::string _filename;
 
-  void _ParseLine(string aline, int apriority);
+  void _ParseLine(std::string aline, int apriority);
 
-  string _ComposeTaskString(SingleTask task);
+  std::string _ComposeTaskString(SingleTask task);
 
-  string _ComposePrioString(SingleTask task);
+  std::string _ComposePrioString(SingleTask task);
 
   void _SortContainer();
 
 public:
-  void ReadFile(string afilename);
+  void ReadFile(std::string afilename);
 
-  void DumpToFile(string afilename = "");
+  void DumpToFile(std::string afilename = "");
 
   void ReadFile(char *afilename);
 
@@ -57,7 +57,7 @@ public:
 
   void ReRead();
 
-  vector<SingleTask> getTasks();
+  std::vector<SingleTask> getTasks();
 };
 } // namespace task
 } // namespace torodofi_lib

@@ -42,6 +42,7 @@ public:
 
   Hotkeys getHotkeys();
   Pathset getPathset();
+  Config getConfig();
   std::string getFilename();
 };
 } // namespace config

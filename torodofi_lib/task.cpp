@@ -1,11 +1,5 @@
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <stdio.h>
-#include <string>
-#include <vector>
-
 #include "task.hpp"
+#include "functions.cpp"
 
 using namespace std;
 
@@ -14,27 +8,6 @@ namespace task {
 
 bool compareByPriority(const SingleTask &a, const SingleTask &b) {
   return a.priority < b.priority;
-}
-
-string vectorToString(vector<string> avector, string dilimiter) {
-  string result;
-  for (size_t i = 0; i < avector.size(); i++)
-    result += avector[i] + dilimiter;
-  return result;
-}
-
-vector<string> stringToVector(string astring, string delimiter) {
-  size_t pos;
-  string token;
-  vector<string> parsed_line;
-
-  while ((pos = astring.find(delimiter)) != string::npos) {
-    token = astring.substr(0, pos);
-    parsed_line.push_back(token);
-    astring.erase(0, pos + delimiter.length());
-  }
-
-  return parsed_line;
 }
 
 void TaskContainer::_ParseLine(string aline, int apriority) {
@@ -47,11 +20,11 @@ void TaskContainer::_ParseLine(string aline, int apriority) {
     _tasks.push_back(SingleTask());
 
     aline = aline.substr(task_format_delimiter.length());
-    parsed_line = stringToVector(aline, task_field_delimiter);
+    parsed_line = func::stringToVector(aline, task_field_delimiter);
 
-    _tasks.back().categories = stringToVector(parsed_line.back(), " ");
+    _tasks.back().categories = func::stringToVector(parsed_line.back(), " ");
     parsed_line.pop_back();
-    _tasks.back().tags = stringToVector(parsed_line.back(), " ");
+    _tasks.back().tags = func::stringToVector(parsed_line.back(), " ");
     parsed_line.pop_back();
 
     _tasks.back().expire_date = parsed_line.back();
@@ -70,8 +43,8 @@ string TaskContainer::_ComposeTaskString(SingleTask task) {
   result += task.text + task_field_delimiter;
   result += task.creation_date + task_field_delimiter;
   result += task.expire_date + task_field_delimiter;
-  result += vectorToString(task.tags) + task_field_delimiter;
-  result += vectorToString(task.categories) + task_field_delimiter;
+  result += func::vectorToString(task.tags) + task_field_delimiter;
+  result += func::vectorToString(task.categories) + task_field_delimiter;
   return result;
 }
 
