@@ -5,18 +5,18 @@
 #include <vector>
 
 #include "config.hpp"
+#include "functions.hpp"
+#include "task.hpp"
 
 using namespace std;
 
 namespace torodofi_lib {
 namespace interface {
 
-const string rofi_args = "-regex -tokenize -i";
+const string rofi_args = "-regex -tokenize -i -dmenu ";
+const string pre_rofi_list = "echo -e ";
 
 const string color_accent = "<span color='#2d7ed8'>";
-
-string strCaption(string add_new_task, string switch_active_done,
-                  string switch_task_agenda);
 
 struct DialogContent {
   string caption;
@@ -28,11 +28,16 @@ protected:
   DialogContent _main_dialog;
   config::Config _config;
   vector<string> _rofi_opts;
+  vector<string> _rofi_list;
+
+  string strCaption();
+  string strTask(task::SingleTask atask);
+  vector<string> vecTask(vector<task::SingleTask> atasks);
 
 public:
   Dialog();
   void Configure(config::Config aconfig);
-  void ShowMain();
+  func::ReturnStatus ShowMain(vector<task::SingleTask> atasks);
   void ShowTask();
 };
 } // namespace interface
