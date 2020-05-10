@@ -33,6 +33,7 @@ protected:
   string strCaption();
   string strTask(task::SingleTask atask);
   vector<string> vecTask(vector<task::SingleTask> atasks);
+  string strPriorities(vector<task::SingleTask> atasks);
 
 public:
   Dialog();

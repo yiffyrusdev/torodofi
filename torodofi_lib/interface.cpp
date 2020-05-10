@@ -40,6 +40,32 @@ vector<string> Dialog::vecTask(vector<task::SingleTask> atasks) {
   return result;
 }
 
+string Dialog::strPriorities(vector<task::SingleTask> atasks) {
+  string result;
+  string tmp;
+  vector<string> first_prio;
+  vector<string> second_prio;
+  for (size_t t = 0; t < atasks.size(); t++) {
+    switch (atasks[t].priority) {
+    case 1:
+      first_prio.push_back(to_string(t));
+      break;
+    case 2:
+      second_prio.push_back(to_string(t));
+      break;
+    }
+  }
+
+  tmp = func::vectorToString(first_prio, ",");
+  tmp = tmp.substr(0, tmp.length() - 1);
+  result += "-u " + tmp + " ";
+  tmp = func::vectorToString(second_prio, ",");
+  tmp = tmp.substr(0, tmp.length() - 1);
+  result += "-a " + tmp + " ";
+
+  return result;
+}
+
 Dialog::Dialog() {}
 
 void Dialog::Configure(config::Config aconfig) {
@@ -59,6 +85,7 @@ func::ReturnStatus Dialog::ShowMain(vector<task::SingleTask> atasks) {
 
   vector<string> rofi_call(rofi_list);
   rofi_call.insert(rofi_call.end(), rofi_opts.begin(), rofi_opts.end());
+  rofi_call.push_back(strPriorities(atasks));
   rofi_call.push_back(strCaption());
 
   string cmd = func::vectorToString(rofi_call);
