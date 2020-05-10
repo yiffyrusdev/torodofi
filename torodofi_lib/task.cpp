@@ -92,8 +92,10 @@ void TaskContainer::DumpToFile(string afilename) {
   ofstream task_file(afilename);
   if (task_file.is_open()) {
     for (size_t t = 0; t < _tasks.size(); t++) {
-      if (_tasks[t].priority != priority)
+      if (_tasks[t].priority != priority) {
+        priority = _tasks[t].priority;
         task_file << _ComposePrioString(_tasks[t]) << endl;
+      }
       task_file << _ComposeTaskString(_tasks[t]) << endl;
     }
   } else {
