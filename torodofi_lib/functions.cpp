@@ -24,5 +24,25 @@ vector<string> stringToVector(string astring, string delimiter) {
 
   return parsed_line;
 }
+
+ReturnStatus execCommand(string command) {
+  char buffer[128];
+  ReturnStatus result;
+
+  // Open pipe to file
+  FILE *pipe = popen(command.c_str(), "r");
+  if (!pipe) {
+    result.status = 404;
+    return result;
+  }
+
+  while (!feof(pipe)) {
+    if (fgets(buffer, 128, pipe) != NULL)
+      result.content += buffer;
+  }
+
+  result.status = pclose(pipe);
+  return result;
+}
 } // namespace func
 } // namespace torodofi_lib
