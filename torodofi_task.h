@@ -23,27 +23,35 @@ struct SingleTask {
 };
 
 bool compareByPriority(const SingleTask &a, const SingleTask &b) {
-  return a.priority > b.priority;
+  return a.priority < b.priority;
+}
+
+string vectorToString(vector<string> avector, string dilimiter = " ") {
+  string result;
+  for (size_t i = 0; i < avector.size(); i++)
+    result += avector[i] + dilimiter;
+  return result;
+}
+
+vector<string> stringToVector(string astring, string delimiter) {
+  size_t pos;
+  string token;
+  vector<string> parsed_line;
+
+  while ((pos = astring.find(delimiter)) != string::npos) {
+    printf("%s\n", astring.c_str());
+    token = astring.substr(0, pos);
+    parsed_line.push_back(token);
+    astring.erase(0, pos + delimiter.length());
+  }
+
+  return parsed_line;
 }
 
 class TaskContainer {
 protected:
   vector<SingleTask> _tasks;
   string _filename;
-
-  vector<string> _ParseVector(string line, string delimiter) {
-    size_t pos;
-    string token;
-    vector<string> parsed_line;
-
-    while ((pos = line.find(delimiter)) != string::npos) {
-      token = line.substr(0, pos);
-      parsed_line.push_back(token);
-      line.erase(0, pos + task_format_delimiter.length());
-    }
-
-    return parsed_line;
-  }
 
   void _ParseLine(string aline, int apriority) {
     vector<string> parsed_line;
@@ -55,11 +63,11 @@ protected:
       _tasks.push_back(SingleTask());
 
       aline = aline.substr(task_format_delimiter.length());
-      parsed_line = _ParseVector(aline, task_field_delimiter);
+      parsed_line = stringToVector(aline, task_field_delimiter);
 
-      _tasks.back().categories = _ParseVector(parsed_line.back(), " ");
+      _tasks.back().categories = stringToVector(parsed_line.back(), " ");
       parsed_line.pop_back();
-      _tasks.back().tags = _ParseVector(parsed_line.back(), " ");
+      _tasks.back().tags = stringToVector(parsed_line.back(), " ");
       parsed_line.pop_back();
 
       _tasks.back().expire_date = parsed_line.back();
@@ -70,6 +78,23 @@ protected:
       parsed_line.pop_back();
       _tasks.back().priority = apriority;
     }
+  }
+
+  string _ComposeTaskString(SingleTask task) {
+    string result = task_format_delimiter;
+
+    result += task.text + task_field_delimiter;
+    result += task.creation_date + task_field_delimiter;
+    result += task.expire_date + task_field_delimiter;
+    result += vectorToString(task.tags) + task_field_delimiter;
+    result += vectorToString(task.categories) + task_field_delimiter;
+    return result;
+  }
+
+  string _ComposePrioString(SingleTask task) {
+    string result = task_prority_delimiter;
+    result += to_string(task.priority);
+    return result;
   }
 
   void _SortContainer() {
@@ -86,19 +111,39 @@ public:
     int curr_priority;
     ifstream task_file(_filename);
 
-    while (getline(task_file, line)) {
-      ipriority = line.find(task_prority_delimiter);
-      if (ipriority == 0)
-        curr_priority =
-            atoi(line.substr(ipriority + delim_len, ipriority + delim_len + 2)
-                     .c_str());
+    if (task_file.is_open()) {
+      while (getline(task_file, line)) {
+        ipriority = line.find(task_prority_delimiter);
+        if (ipriority == 0)
+          curr_priority =
+              atoi(line.substr(ipriority + delim_len, ipriority + delim_len + 2)
+                       .c_str());
 
-      _ParseLine(line, curr_priority);
+        _ParseLine(line, curr_priority);
+      }
+      _SortContainer();
+    } else {
+      printf("No task file.md!");
     }
-    _SortContainer();
   }
 
-  void DumpToFile(string afilename) {}
+  void DumpToFile(string afilename = "") {
+    if (afilename == "")
+      afilename = _filename;
+
+    int priority;
+
+    ofstream task_file(afilename);
+    if (task_file.is_open()) {
+      for (size_t t = 0; t < _tasks.size(); t++) {
+        if (_tasks[t].priority != priority)
+          task_file << _ComposePrioString(_tasks[t]) << endl;
+        task_file << _ComposeTaskString(_tasks[t]) << endl;
+      }
+    } else {
+      printf("IO ERROR!!!");
+    }
+  }
 
   void ReadFile(char *afilename) { ReadFile(string(afilename)); }
 
