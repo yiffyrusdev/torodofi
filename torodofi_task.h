@@ -1,16 +1,18 @@
+#include <algorithm>
 #include <fstream>
+#include <iostream>
+#include <stdio.h>
 #include <string>
 #include <vector>
-
-#include <stdio.h>
 
 using namespace std;
 
 string task_format_delimiter = "* ";
-string task_field_delimiter = "<$";
+string task_prority_delimiter = "## ";
+string task_field_delimiter = ".,.";
 
 struct SingleTask {
-  unsigned int priority;
+  int priority;
 
   string text;
   string creation_date;
@@ -19,6 +21,10 @@ struct SingleTask {
   vector<string> tags;
   vector<string> categories;
 };
+
+bool compareByPriority(const SingleTask &a, const SingleTask &b) {
+  return a.priority > b.priority;
+}
 
 class TaskContainer {
 protected:
@@ -39,15 +45,17 @@ protected:
     return parsed_line;
   }
 
-  void _ParseLine(string line) {
-    int delimiterindex = line.find(task_format_delimiter);
+  void _ParseLine(string aline, int apriority) {
     vector<string> parsed_line;
     vector<string> tags_categories;
 
-    if (delimiterindex >= 0) {
+    int del = aline.find(task_format_delimiter);
+
+    if (del == 0) {
       _tasks.push_back(SingleTask());
 
-      parsed_line = _ParseVector(line, task_field_delimiter);
+      aline = aline.substr(task_format_delimiter.length());
+      parsed_line = _ParseVector(aline, task_field_delimiter);
 
       _tasks.back().categories = _ParseVector(parsed_line.back(), " ");
       parsed_line.pop_back();
@@ -60,23 +68,41 @@ protected:
       parsed_line.pop_back();
       _tasks.back().text = parsed_line.back();
       parsed_line.pop_back();
-      _tasks.back().priority = atoi(parsed_line.back().c_str());
-      parsed_line.pop_back();
+      _tasks.back().priority = apriority;
     }
+  }
+
+  void _SortContainer() {
+    sort(_tasks.begin(), _tasks.end(), compareByPriority);
   }
 
 public:
   void ReadFile(string afilename) {
     _filename = afilename;
-    string line;
 
-    ifstream tasks(_filename);
-    while (getline(tasks, line)) {
-      _ParseLine(line);
+    string line;
+    size_t delim_len = task_prority_delimiter.length();
+    size_t ipriority;
+    int curr_priority;
+    ifstream task_file(_filename);
+
+    while (getline(task_file, line)) {
+      ipriority = line.find(task_prority_delimiter);
+      if (ipriority == 0)
+        curr_priority =
+            atoi(line.substr(ipriority + delim_len, ipriority + delim_len + 2)
+                     .c_str());
+
+      _ParseLine(line, curr_priority);
     }
+    _SortContainer();
   }
 
+  void DumpToFile(string afilename) {}
+
   void ReadFile(char *afilename) { ReadFile(string(afilename)); }
+
+  void DumpToFile(char *afilename) { DumpToFile(string(afilename)); }
 
   void ReRead() { ReadFile(_filename); }
 
