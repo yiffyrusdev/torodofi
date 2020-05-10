@@ -7,9 +7,11 @@
 
 using namespace std;
 
-string task_format_delimiter = "* ";
-string task_prority_delimiter = "## ";
-string task_field_delimiter = ".,.";
+namespace torodofi_lib {
+
+const string task_format_delimiter = "* ";
+const string task_prority_delimiter = "## ";
+const string task_field_delimiter = ".,.";
 
 struct SingleTask {
   int priority;
@@ -152,3 +154,4 @@ public:
 
   vector<SingleTask> getTasks() { return _tasks; }
 };
+} // namespace torodofi_lib

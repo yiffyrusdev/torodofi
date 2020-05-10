@@ -4,6 +4,7 @@
 
 using namespace std;
 
+namespace torodofi_lib {
 const string config_format_delimiter = ": ";
 
 struct Hotkeys {
@@ -79,3 +80,4 @@ public:
   Pathset getPathset() { return _pathset; }
   string getFilename() { return _filename; }
 };
+} // namespace torodofi_lib
