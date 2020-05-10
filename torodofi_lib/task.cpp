@@ -1,9 +1,9 @@
 #include "task.hpp"
-#include "functions.cpp"
+#include "functions.hpp"
 
 using namespace std;
 
-namespace torodofi_lib {
+namespace torodofi {
 namespace task {
 
 bool compareByPriority(const SingleTask &a, const SingleTask &b) {
@@ -113,4 +113,4 @@ void TaskContainer::ReRead() { ReadFile(_filename); }
 
 vector<SingleTask> TaskContainer::getTasks() { return _tasks; }
 } // namespace task
-} // namespace torodofi_lib
+} // namespace torodofi

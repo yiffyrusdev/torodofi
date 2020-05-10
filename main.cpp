@@ -1,10 +1,10 @@
-#include "torodofi_lib/config.cpp"
-#include "torodofi_lib/functions.hpp"
-#include "torodofi_lib/interface.cpp"
-#include "torodofi_lib/task.cpp"
-
 #include <stdio.h>
 #include <string>
+
+#include "torodofi_lib/config.hpp"
+#include "torodofi_lib/functions.hpp"
+#include "torodofi_lib/interface.hpp"
+#include "torodofi_lib/task.hpp"
 
 using namespace std;
 
@@ -12,12 +12,12 @@ int main(int argc, char *argv[]) {
   int statuscode = 0;
   bool infiniteShow = true;
 
-  torodofi_lib::config::ConfigParser ConfigParser;
-  torodofi_lib::config::Config Config;
-  torodofi_lib::task::TaskContainer TaskContainer;
-  torodofi_lib::interface::Dialog Dialog;
+  torodofi::config::ConfigParser ConfigParser;
+  torodofi::config::Config Config;
+  torodofi::task::TaskContainer TaskContainer;
+  torodofi::interface::Dialog Dialog;
 
-  torodofi_lib::func::ReturnStatus ReturnStatus;
+  torodofi::func::ReturnStatus ReturnStatus;
 
   ConfigParser.ReadFile("config");
   TaskContainer.ReadFile(ConfigParser.getPathset().notefile);

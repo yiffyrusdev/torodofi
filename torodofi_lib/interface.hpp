@@ -10,7 +10,7 @@
 
 using namespace std;
 
-namespace torodofi_lib {
+namespace torodofi {
 namespace interface {
 
 const string rofi_args = "-regex -tokenize -i -no-levenshtein-sort \"$@\"";
@@ -42,4 +42,4 @@ public:
   void ShowTask();
 };
 } // namespace interface
-} // namespace torodofi_lib
+} // namespace torodofi

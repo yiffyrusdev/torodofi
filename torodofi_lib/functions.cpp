@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace torodofi_lib {
+namespace torodofi {
 namespace func {
 
 string linuxColumn(string astring, string separator) {
@@ -55,4 +55,4 @@ ReturnStatus execCommand(string command) {
   return result;
 }
 } // namespace func
-} // namespace torodofi_lib
+} // namespace torodofi

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace torodofi_lib {
+namespace torodofi {
 namespace interface {
 
 string Dialog::strCaption() {
@@ -96,4 +96,4 @@ func::ReturnStatus Dialog::ShowMain(vector<task::SingleTask> atasks) {
 }
 
 } // namespace interface
-} // namespace torodofi_lib
+} // namespace torodofi

@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace torodofi_lib {
+namespace torodofi {
 namespace task {
 
 const std::string task_format_delimiter = "* ";
@@ -60,4 +60,4 @@ public:
   std::vector<SingleTask> getTasks();
 };
 } // namespace task
-} // namespace torodofi_lib
+} // namespace torodofi

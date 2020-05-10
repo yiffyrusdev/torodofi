@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string>
 
-namespace torodofi_lib {
+namespace torodofi {
 namespace config {
 const std::string config_format_delimiter = ": ";
 
@@ -46,4 +46,4 @@ public:
   std::string getFilename();
 };
 } // namespace config
-} // namespace torodofi_lib
+} // namespace torodofi

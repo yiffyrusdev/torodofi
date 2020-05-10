@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace torodofi_lib {
+namespace torodofi {
 namespace config {
 
 ConfigParser::ConfigParser() {
@@ -60,4 +60,4 @@ Pathset ConfigParser::getPathset() { return _config.pathset; }
 Config ConfigParser::getConfig() { return _config; }
 string ConfigParser::getFilename() { return _filename; }
 } // namespace config
-} // namespace torodofi_lib
+} // namespace torodofi

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-namespace torodofi_lib {
+namespace torodofi {
 namespace func {
 struct ReturnStatus {
   int status;
@@ -19,4 +19,4 @@ vector<string> stringToVector(string astring, string delimiter = " ");
 
 ReturnStatus execCommand(string command);
 } // namespace func
-} // namespace torodofi_lib
+} // namespace torodofi
