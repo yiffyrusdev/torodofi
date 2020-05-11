@@ -94,6 +94,8 @@ bool date::_validate_and_pass(unsigned short yyyy, unsigned short mm,
   }
 }
 
+string date::toString() { return _gnudate; }
+
 const char *date::c_str() const { return _gnudate.c_str(); }
 
 } // namespace types

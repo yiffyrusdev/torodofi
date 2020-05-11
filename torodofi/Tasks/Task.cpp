@@ -66,10 +66,17 @@ string Task::toString() {
       logic::joinString(_task.categories, task_field_inner_delimiter),
       _task.text};
   return task_start_point + logic::joinString(vectorized, task_field_delimiter);
-} // namespace tasks
+}
 
+// getters
 types::task Task::getTask() { return _task; }
-void Task::setId(unsigned int aid) { _task.id = aid; }
+// setters
+void Task::_setId(unsigned int aid) { _task.id = aid; }
+void Task::setPriority(unsigned apriority) { _task.priority = apriority; }
+void Task::setExpire(types::date adate) {}
+void Task::setTags(std::vector<std::string> atags) {}
+void Task::setCategories(std::vector<std::string> acategories) {}
+void Task::setText(std::string atext) {}
 
 } // namespace tasks
 } // namespace toro

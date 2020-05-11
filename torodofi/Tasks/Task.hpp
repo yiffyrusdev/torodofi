@@ -29,9 +29,15 @@ public:
   Task(std::string taskstring, unsigned priority = 3);
   // Repr task as formatted string
   std::string toString();
-
+  // getters
   types::task getTask();
-  void setId(unsigned aid);
+  // setters
+  void _setId(unsigned aid); // Do not use it if you are not me =)
+  void setPriority(unsigned apriority);
+  void setExpire(types::date adate);
+  void setTags(std::vector<std::string> atags);
+  void setCategories(std::vector<std::string> acategories);
+  void setText(std::string atext);
 };
 
 bool cmp_prioroty(Task &a, Task &b);

@@ -24,6 +24,9 @@ public:
   date(std::string yyyy_mm_dd_date);
   // 2020,05,11 integers
   date(unsigned year, unsigned month, unsigned day);
+
+  // Return GNU date String value
+  std::string toString();
   // return constant str like string::c_str()
   const char *c_str() const;
 };

@@ -34,7 +34,7 @@ TaskContainer::TaskContainer(string afilename) {
     _sort_priority();
     // Give ID to sorted tasks
     for (size_t i = 0; i < _tasks.size(); i++) {
-      _tasks[i].setId(i);
+      _tasks[i]._setId(i);
     }
   } else {
     printf("string afilename: %s\n", afilename.c_str());
