@@ -26,10 +26,13 @@ public:
   // pass an .md formatted string:
   // * creation_date expire_date tags categories text
   // * yyyy-mm-dd yyyy-mm-dd tag,tag,tag cat,cat text text text
-  Task(std::string taskstring, unsigned id, unsigned priority = 3);
+  Task(std::string taskstring, unsigned priority = 3);
 
   types::task getTask();
+  void setId(unsigned aid);
 };
+
+bool cmp_prioroty(Task &a, Task &b);
 
 } // namespace tasks
 } // namespace toro

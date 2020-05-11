@@ -5,9 +5,17 @@ using namespace std;
 namespace toro {
 namespace tasks {
 
+// functions
+
+bool cmp_prioroty(Task &a, Task &b) {
+  return a.getTask().priority < b.getTask().priority;
+}
+
+// class Task
+
 Task::Task() {}
 
-Task::Task(string atask, unsigned id, unsigned priority) {
+Task::Task(string atask, unsigned apriority) {
   vector<string> parsed_task = _validate_and_pass(atask);
   // task fields
   types::date creation_date;
@@ -24,6 +32,7 @@ Task::Task(string atask, unsigned id, unsigned priority) {
   vector_text = vector<string>(parsed_task.begin() + 4, parsed_task.end());
   text = logic::joinString(vector_text);
 
+  _task.priority = apriority;
   _task.creation_date = creation_date;
   _task.expire_date = expire_date;
   _task.tags = tags;
@@ -51,6 +60,7 @@ vector<string> Task::_validate_and_pass(string atask) {
 }
 
 types::task Task::getTask() { return _task; }
+void Task::setId(unsigned int aid) { _task.id = aid; }
 
 } // namespace tasks
 } // namespace toro

@@ -1,10 +1,12 @@
 #pragma once
 
-#include "Task.hpp"
+#include <algorithm>
 #include <fstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
+
+#include "Task.hpp"
 
 namespace toro {
 namespace tasks {
@@ -15,6 +17,9 @@ class TaskContainer {
 protected:
   std::vector<Task> _tasks;
   std::string _filename;
+
+  // Sort containered Tasks by priority;
+  void _sort_priority();
 
 public:
   TaskContainer();
