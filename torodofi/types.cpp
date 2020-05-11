@@ -98,5 +98,47 @@ string date::toString() { return _gnudate; }
 
 const char *date::c_str() const { return _gnudate.c_str(); }
 
+// getters
+unsigned short date::getYear() { return _year; }
+unsigned short date::getMonth() { return _month; }
+unsigned short date::getDay() { return _day; }
+
+// Operators
+bool date::operator==(date &other) { return _gnudate == other.toString(); }
+
+bool date::operator!=(date &other) { return _gnudate != other.toString(); }
+
+bool date::operator>(date &other) {
+  bool isgreater = false;
+
+  if (_year > other.getYear()) {
+    isgreater = true;
+  } else {
+    if (_year == other.getYear()) {
+      if (_month > other.getMonth()) {
+        isgreater = true;
+      } else {
+        if (_month == other.getMonth()) {
+          if (_day > other.getDay()) {
+            isgreater = true;
+          }
+        }
+      }
+    }
+  }
+
+  return isgreater;
+}
+
+bool date::operator<(date &other) {
+  return ((*this) != other) && (!((*this) > other));
+}
+bool date::operator>=(date &other) {
+  return ((*this) > other) || ((*this) == other);
+}
+bool date::operator<=(date &other) {
+  return ((*this) < other) || ((*this) == other);
+}
+
 } // namespace types
 } // namespace toro

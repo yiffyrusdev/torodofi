@@ -29,6 +29,19 @@ public:
   std::string toString();
   // return constant str like string::c_str()
   const char *c_str() const;
+
+  // getters
+  unsigned short getYear();
+  unsigned short getMonth();
+  unsigned short getDay();
+
+  // Operators
+  bool operator==(date &other);
+  bool operator>(date &other);
+  bool operator<(date &other);
+  bool operator>=(date &other);
+  bool operator<=(date &other);
+  bool operator!=(date &other);
 };
 
 struct task {
