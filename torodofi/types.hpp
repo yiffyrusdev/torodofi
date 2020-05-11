@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace toro {
 namespace types {
@@ -25,6 +26,16 @@ public:
   date(unsigned year, unsigned month, unsigned day);
   // return constant str like string::c_str()
   const char *c_str() const;
+};
+
+struct task {
+  unsigned id; // calculates automatically, task string does not contain ID
+  unsigned priority; // priority have to be passed in cunstructor as constant
+  types::date creation_date;           // date of creation
+  types::date expire_date;             // deadline date
+  std::vector<std::string> tags;       // marked with tags
+  std::vector<std::string> categories; // exist in categories
+  std::string text;                    // task description
 };
 
 } // namespace types

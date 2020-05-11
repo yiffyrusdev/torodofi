@@ -26,9 +26,11 @@ date::date(string yyyymmdd) {
     if (passed) {
       _gnudate = logic::joinString(parsed, "-");
     } else {
+      printf("unsigned short yyyy, mm, dd: %d %d %d\n", yyyy, mm, dd);
       throw std::invalid_argument("Date must be a valid GNU date!");
     }
   } else {
+    printf("string yyyymmdd: %s", yyyymmdd.c_str());
     throw std::invalid_argument("Date must contain 3 fields");
   }
 }
