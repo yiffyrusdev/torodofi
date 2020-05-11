@@ -10,7 +10,9 @@ namespace types {
 
 date::date() {}
 
-date::date(string yyyymmdd) {
+date::date(string yyyymmdd) { _real_constructor(yyyymmdd); }
+
+void date::_real_constructor(string yyyymmdd) {
   unsigned short yyyy;
   unsigned short mm;
   unsigned short dd;
@@ -104,9 +106,12 @@ unsigned short date::getMonth() { return _month; }
 unsigned short date::getDay() { return _day; }
 
 // Operators
-bool date::operator==(date &other) { return _gnudate == other.toString(); }
-
-bool date::operator!=(date &other) { return _gnudate != other.toString(); }
+bool date::operator==(date &other) {
+  bool eq = _year == other.getYear();
+  eq = eq && _month == other.getMonth();
+  eq = eq && _day == other.getDay();
+  return eq;
+}
 
 bool date::operator>(date &other) {
   bool isgreater = false;
@@ -130,14 +135,21 @@ bool date::operator>(date &other) {
   return isgreater;
 }
 
+bool date::operator!=(date &other) { return !((*this) == other); }
+
 bool date::operator<(date &other) {
-  return ((*this) != other) && (!((*this) > other));
+  return ((*this) != other) && !((*this) > other);
 }
 bool date::operator>=(date &other) {
   return ((*this) > other) || ((*this) == other);
 }
 bool date::operator<=(date &other) {
   return ((*this) < other) || ((*this) == other);
+}
+
+date &date::operator=(string gnudate) {
+  _real_constructor(gnudate);
+  return *this;
 }
 
 } // namespace types

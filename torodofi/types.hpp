@@ -13,6 +13,8 @@ protected:
   unsigned short _year;
   unsigned short _month;
   unsigned short _day;
+  // constructor internals
+  void _real_constructor(std::string yyyymmdd);
   // Check if date valid and pass values to members
   bool _validate_and_pass(unsigned short yyyy, unsigned short mm,
                           unsigned short dd);
@@ -42,6 +44,8 @@ public:
   bool operator>=(date &other);
   bool operator<=(date &other);
   bool operator!=(date &other);
+
+  date &operator=(std::string gnudate);
 };
 
 struct task {

@@ -32,12 +32,12 @@ Task::Task(string atask, unsigned apriority) {
   vector_text = vector<string>(parsed_task.begin() + 4, parsed_task.end());
   text = logic::joinString(vector_text);
 
-  _task.priority = apriority;
+  setPriority(apriority);
   _task.creation_date = creation_date;
-  _task.expire_date = expire_date;
-  _task.tags = tags;
-  _task.categories = categories;
-  _task.text = text;
+  setExpire(expire_date);
+  setTags(tags);
+  setCategories(categories);
+  setText(text);
 }
 
 vector<string> Task::_validate_and_pass(string atask) {
@@ -73,10 +73,16 @@ types::task Task::getTask() { return _task; }
 // setters
 void Task::_setId(unsigned int aid) { _task.id = aid; }
 void Task::setPriority(unsigned apriority) { _task.priority = apriority; }
-void Task::setExpire(types::date adate) {}
-void Task::setTags(std::vector<std::string> atags) {}
-void Task::setCategories(std::vector<std::string> acategories) {}
-void Task::setText(std::string atext) {}
+void Task::setExpire(types::date adate) {
+  if (_task.creation_date <= adate) {
+    _task.expire_date = adate;
+  }
+}
+void Task::setTags(std::vector<std::string> atags) { _task.tags = atags; }
+void Task::setCategories(std::vector<std::string> acategories) {
+  _task.categories = acategories;
+}
+void Task::setText(std::string atext) { _task.text = atext; }
 
 } // namespace tasks
 } // namespace toro
