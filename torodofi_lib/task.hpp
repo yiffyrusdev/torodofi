@@ -15,7 +15,10 @@ const std::string task_prority_delimiter = "## ";
 const std::string task_field_delimiter = ".,.";
 
 struct SingleTask {
+  int id;
+
   int priority;
+  bool done;
 
   std::string text;
   std::string creation_date;
@@ -38,7 +41,7 @@ protected:
   std::vector<SingleTask> _tasks;
   std::string _filename;
 
-  void _ParseLine(std::string aline, int apriority);
+  int _ParseLine(std::string aline, int apriority, int aid);
 
   std::string _ComposeTaskString(SingleTask task);
 

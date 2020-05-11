@@ -13,10 +13,7 @@ using namespace std;
 namespace torodofi {
 namespace interface {
 
-const string rofi_args = "-regex -tokenize -i -no-levenshtein-sort \"$@\"";
-const string pre_rofi_list = "echo -e ";
-
-const string color_accent = "<span color='#2d7ed8'>";
+const string menu_back = "";
 
 struct DialogContent {
   string caption;
@@ -28,18 +25,21 @@ protected:
   DialogContent _main_dialog;
   config::Config _config;
   vector<string> _rofi_opts;
-  vector<string> _rofi_list;
+  string _rofi_list;
 
-  string strCaption();
-  string strTask(task::SingleTask atask);
-  vector<string> vecTask(vector<task::SingleTask> atasks);
-  string strPriorities(vector<task::SingleTask> atasks);
+  string _StrCaption();
+  string _StrTask(task::SingleTask atask);
+  vector<string> _VecTask(vector<task::SingleTask> atasks);
+  string _StrPriorities(vector<task::SingleTask> atasks);
+
+  string _TaskCaption(task::SingleTask atask);
+  vector<string> _TaskOptions(task::SingleTask atask);
 
 public:
   Dialog();
   void Configure(config::Config aconfig);
   func::ReturnStatus ShowMain(vector<task::SingleTask> atasks);
-  void ShowTask();
+  func::ReturnStatus ShowTask(task::SingleTask atask);
 };
 } // namespace interface
 } // namespace torodofi

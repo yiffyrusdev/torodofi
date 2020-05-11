@@ -10,7 +10,7 @@ bool compareByPriority(const SingleTask &a, const SingleTask &b) {
   return a.priority < b.priority;
 }
 
-void TaskContainer::_ParseLine(string aline, int apriority) {
+int TaskContainer::_ParseLine(string aline, int apriority, int aid) {
   vector<string> parsed_line;
   vector<string> tags_categories;
 
@@ -34,7 +34,10 @@ void TaskContainer::_ParseLine(string aline, int apriority) {
     _tasks.back().text = parsed_line.back();
     parsed_line.pop_back();
     _tasks.back().priority = apriority;
+    _tasks.back().id = aid;
+    return ++aid;
   }
+  return aid;
 }
 
 string TaskContainer::_ComposeTaskString(SingleTask task) {
@@ -65,6 +68,7 @@ void TaskContainer::ReadFile(string afilename) {
   size_t delim_len = task_prority_delimiter.length();
   size_t ipriority;
   int curr_priority;
+  int curr_id;
   ifstream task_file(_filename);
 
   if (task_file.is_open()) {
@@ -75,7 +79,7 @@ void TaskContainer::ReadFile(string afilename) {
             atoi(line.substr(ipriority + delim_len, ipriority + delim_len + 2)
                      .c_str());
 
-      _ParseLine(line, curr_priority);
+      curr_id = _ParseLine(line, curr_priority, curr_id);
     }
     _SortContainer();
   } else {
