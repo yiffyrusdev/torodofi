@@ -27,6 +27,8 @@ public:
   // * creation_date expire_date tags categories text
   // * yyyy-mm-dd yyyy-mm-dd tag,tag,tag cat,cat text text text
   Task(std::string taskstring, unsigned priority = 3);
+  // Repr task as formatted string
+  std::string toString();
 
   types::task getTask();
   void setId(unsigned aid);

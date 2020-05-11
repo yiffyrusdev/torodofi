@@ -32,6 +32,8 @@ public:
   // ......
   // ## (x) means (x) priority of listed tasks
   TaskContainer(std::string afilename);
+  // Dump task to a file back
+  void Dump(std::string afilename = "");
 
   std::vector<Task> getTasks();
 };

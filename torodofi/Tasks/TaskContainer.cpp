@@ -28,6 +28,8 @@ TaskContainer::TaskContainer(string afilename) {
         }
       }
     }
+    // If read was successfull, then we can store afilename
+    _filename = afilename;
     // Sort read tasks by priority
     _sort_priority();
     // Give ID to sorted tasks
@@ -37,6 +39,29 @@ TaskContainer::TaskContainer(string afilename) {
   } else {
     printf("string afilename: %s\n", afilename.c_str());
     throw std::invalid_argument("File could not be opened");
+  }
+}
+
+void TaskContainer::Dump(std::string afilename) {
+  if (afilename == "") {
+    afilename = _filename;
+  }
+  unsigned priority;
+  Task cmptask;
+  ofstream file(afilename);
+
+  if (file.is_open()) {
+    for (size_t t = 0; t < _tasks.size(); t++) {
+      cmptask = _tasks[t];
+      if (cmptask.getTask().priority != priority) {
+        priority = cmptask.getTask().priority;
+        file << priority_start_point + to_string(priority) << endl;
+      }
+      file << cmptask.toString() << endl;
+    }
+  } else {
+    printf("string afilename: %s\n", afilename.c_str());
+    throw std::runtime_error("Bad IO: could not create file");
   }
 }
 
