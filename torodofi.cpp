@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <string>
 
-#include "torodofi/Tasks/Task.hpp"
+#include "torodofi/Tasks/TaskContainer.hpp"
 
 using namespace std;
 
-int main(int argc, char *argv[]) { return 0; }
+int main(int argc, char *argv[]) {
+  toro::tasks::TaskContainer tasks("example.md");
+  printf("%s", tasks.getTasks()[0].getTask().tags[2].c_str());
+  return 0;
+}
