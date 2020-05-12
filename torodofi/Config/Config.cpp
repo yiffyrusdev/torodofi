@@ -6,8 +6,18 @@ namespace toro {
 namespace config {
 
 // Config
-Config::Config() {}
-Config::Config(string afilename) { readFile(afilename); }
+void Config::_Config() {
+  _config.exec.rofi = "rofi";
+  _config.keys.kb_active_done = "Alt+a";
+  _config.keys.kb_new_task = "Alt+n";
+  _config.keys.kb_task_agenda = "Alt+a";
+  _config.path.taskfile = "example.md";
+}
+Config::Config() { _Config(); }
+Config::Config(string afilename) {
+  _Config();
+  readFile(afilename);
+}
 
 // Config public
 void Config::readFile(string afilename) {
