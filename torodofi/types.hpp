@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ctime>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -37,6 +38,8 @@ public:
   // Return vector<date> of dates after current
   std::vector<date> vectorAfter(size_t acount);
 
+  // Return todays date
+  date today();
   // Return GNU date String value
   std::string toString();
   // return constant str like string::c_str()

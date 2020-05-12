@@ -7,6 +7,9 @@ namespace tasks {
 
 void TaskContainer::_sort_priority() {
   sort(_tasks.begin(), _tasks.end(), cmp_prioroty);
+  for (size_t i = 0; i < _tasks.size(); i++) {
+    _tasks[i]._setId(i);
+  }
 }
 
 // class TaskContainer
@@ -66,10 +69,6 @@ void TaskContainer::readFile(string afilename) {
     _filename = afilename;
     // Sort read tasks by priority
     _sort_priority();
-    // Give ID to sorted tasks
-    for (size_t i = 0; i < _tasks.size(); i++) {
-      _tasks[i]._setId(i);
-    }
     // Aggregate all tags and categories
     for (size_t t = 0; t < _tasks.size(); t++) {
       addTag(_tasks[t].getTags());
@@ -79,6 +78,14 @@ void TaskContainer::readFile(string afilename) {
     printf("tasks::TaskContainer: string afilename: %s\n", afilename.c_str());
     throw std::invalid_argument("File could not be opened");
   }
+}
+
+void TaskContainer::addTask(string atext, types::date expire,
+                            vector<string> atags, vector<string> acategories,
+                            unsigned apriority) {
+  Task new_task(atext, expire, atags, acategories, apriority);
+  _tasks.push_back(new_task);
+  _sort_priority();
 }
 
 void TaskContainer::addCategory(string acat) {

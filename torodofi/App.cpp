@@ -7,11 +7,8 @@ namespace app {
 
 // class App
 App::App(string aconfigfilename) {
-  types::config _config;
-
   _readConfig(aconfigfilename);
-  _config = _objConfig.getConfig();
-  _readTasks(_config.path.taskfile);
+  _readTasks(_objConfig.getConfig().path.taskfile);
 }
 
 // public
@@ -25,37 +22,58 @@ void App::Start() {
   bool showtask = false;
   bool edittask = false;
 
+  string new_text;
+  types::date new_date;
+  vector<string> new_tags, new_categories;
+  unsigned new_prioroty = 1;
+
   while (showactive) {
     status = _showActiveTasks();
-    if (status.code != 0) {
-      return;
-    }
-    choice = status.output;
-    choice = choice.substr(0, choice.length() - 1); // remove \n symbol
-    if (choice == menu_back) {
-      showactive = false;
-    } else {
-      choice_id = atoi(logic::splitString(choice)[0].c_str());
-      showtask = true;
-    }
-
-    while (showtask) {
-      status = _showOneTask(choice_id);
+    printf("%d\n", status.code);
+    switch (status.code) {
+    case 10: // kb-custom-1
+      break;
+    case 2816: // kb-custom-2
+      new_text = _chooseText("Enter new task text!", "Task");
+      new_date = _chooseDate("Choose Deadline!");
+      new_tags = _chooseTags("Choose tags for task!");
+      new_categories = _chooseCategories("Choose categories for task!");
+      _objTasks.addTask(new_text, new_date, new_tags, new_categories,
+                        new_prioroty);
+      break;
+    case 12: // kb-custom-3
+      break;
+    case 0:
       choice = status.output;
       choice = choice.substr(0, choice.length() - 1); // remove \n symbol
       if (choice == menu_back) {
-        showtask = false;
-      } else if (choice == one_task_actions[0]) { // 0 Mark as done
+        showactive = false;
+      } else {
+        choice_id = atoi(logic::splitString(choice)[0].c_str());
         showtask = true;
-      } else if (choice == one_task_actions[1]) { // 1 Edit
-        showtask = false;
-        edittask = true;
       }
-    }
 
-    while (edittask) {
-      _editTask(choice_id);
-      edittask = false; // thats why if choice == menu_back is unneeded
+      while (showtask) {
+        status = _showOneTask(choice_id);
+        choice = status.output;
+        choice = choice.substr(0, choice.length() - 1); // remove \n symbol
+        if (choice == menu_back) {
+          showtask = false;
+        } else if (choice == one_task_actions[0]) { // 0 Mark as done
+          showtask = true;
+        } else if (choice == one_task_actions[1]) { // 1 Edit
+          showtask = false;
+          edittask = true;
+        }
+      }
+
+      while (edittask) {
+        _editTask(choice_id);
+        edittask = false; // thats why if choice == menu_back is unneeded
+      }
+      break;
+    default:
+      return;
     }
   }
 
@@ -87,7 +105,7 @@ types::returnstatus App::_showActiveTasks() {
     }
   }
   cmd = _caption_based_menu(active_tasks_caption, _objTasks.toString(),
-                            "Active") +
+                            "Active", true, kb_customs) +
         " ";
   cmd += "-u " + logic::joinString(high_priorities, ",") + " ";
   cmd += "-a " + logic::joinString(medi_priorities, ",") + " ";
@@ -264,7 +282,8 @@ string App::_task_based_menu(tasks::Task atask, vector<string> add_menu) {
 }
 
 string App::_caption_based_menu(string acaption, string add_menu,
-                                string aprompt, bool any_menu) {
+                                string aprompt, bool any_menu,
+                                string custom_rofi_keys) {
   types::config _config = _objConfig.getConfig();
   string cmd;
 
@@ -274,7 +293,7 @@ string App::_caption_based_menu(string acaption, string add_menu,
            rofi_options_delimiter;
   }
   cmd += add_menu + "\" | ";
-  cmd += _config.exec.rofi + " ";
+  cmd += _config.exec.rofi + " " + custom_rofi_keys + " ";
   cmd += "-dmenu -p \"" + aprompt + "\" ";
   cmd += "-mesg \"" + acaption + "\"";
 
@@ -289,6 +308,13 @@ void App::_readConfig(string afilename) {
   active_tasks_caption += _config.keys.kb_new_task + "to add new task\n";
   active_tasks_caption += _config.keys.kb_active_done + "to view done tasks\n";
   active_tasks_caption += _config.keys.kb_task_agenda + "to view agenda";
+
+  kb_customs =
+      " -kb-custom-1 \"" + _objConfig.getConfig().keys.kb_active_done + "\"";
+  kb_customs +=
+      " -kb-custom-2 \"" + _objConfig.getConfig().keys.kb_new_task + "\"";
+  kb_customs +=
+      " -kb-custom-3 \"" + _objConfig.getConfig().keys.kb_task_agenda + "\"";
 }
 
 void App::_readTasks(string afilename) { _objTasks.readFile(afilename); }

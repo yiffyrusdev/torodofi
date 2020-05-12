@@ -30,8 +30,8 @@ class App {
 protected:
   config::Config _objConfig;
   tasks::TaskContainer _objTasks;
-
   std::string active_tasks_caption;
+  std::string kb_customs;
 
   // Read configuration file
   void _readConfig(std::string afilename);
@@ -42,7 +42,8 @@ protected:
   std::string _task_based_menu(tasks::Task atask,
                                std::vector<std::string> add_menu);
   std::string _caption_based_menu(std::string acaption, std::string add_menu,
-                                  std::string aprompt, bool any_menu = true);
+                                  std::string aprompt, bool any_menu = true,
+                                  std::string custom_rofi_keys = "");
   // Show rofi window with active tasks list
   // return selected fiels string
   types::returnstatus _showActiveTasks();

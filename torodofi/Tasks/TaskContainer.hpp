@@ -39,6 +39,10 @@ public:
   void readFile(std::string afilename);
   // Dump task to a file back
   void Dump(std::string afilename = "");
+  // Add new task
+  void addTask(std::string atext, types::date expire,
+               std::vector<std::string> atags,
+               std::vector<std::string> acategories, unsigned apriority);
   // Add new category
   void addCategory(std::string acat);
   void addCategory(std::vector<std::string> acats);

@@ -8,7 +8,10 @@ namespace types {
 
 // class date
 
-date::date() {}
+date::date() {
+  date today = this->today();
+  _validate_and_pass(today.getYear(), today.getMonth(), today.getDay());
+}
 
 date::date(string yyyymmdd) { _real_constructor(yyyymmdd); }
 
@@ -100,6 +103,20 @@ vector<date> date::vectorAfter(size_t acount) {
   }
 
   return dates;
+}
+
+date date::today() {
+  time_t rawtime;
+  struct tm *timeinfo;
+  char buffer[80];
+  string today_date;
+
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
+  strftime(buffer, 80, "%Y-%m-%d", timeinfo);
+  today_date = buffer;
+
+  return date(today_date);
 }
 
 string date::toString() { return _gnudate; }

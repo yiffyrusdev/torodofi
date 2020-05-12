@@ -28,6 +28,9 @@ protected:
 
 public:
   Task();
+  // pass all task parameters
+  Task(std::string atext, types::date expire, std::vector<std::string> atags,
+       std::vector<std::string> acategories, unsigned apriority);
   // pass an .md formatted string:
   // * creation_date expire_date tags categories text
   // * yyyy-mm-dd yyyy-mm-dd tag,tag,tag cat,cat text text text

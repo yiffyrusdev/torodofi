@@ -15,6 +15,16 @@ bool cmp_prioroty(Task &a, Task &b) {
 
 Task::Task() {}
 
+Task::Task(string atext, types::date expire, vector<string> atags,
+           vector<string> acategories, unsigned apriority) {
+  _task.text = atext;
+  _task.expire_date = expire;
+  _task.tags = atags;
+  _task.categories = acategories;
+  _task.creation_date = types::date(); // empty constructs today
+  _task.priority = apriority;
+}
+
 Task::Task(string atask, unsigned apriority) {
   vector<string> parsed_task = _validate_and_pass(atask);
   // task fields
