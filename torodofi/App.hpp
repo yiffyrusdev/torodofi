@@ -51,6 +51,15 @@ protected:
   types::returnstatus _showOneTask(unsigned aid);
   // Edit selected by id task
   void _editTask(unsigned aid);
+  // Choose Tags
+  std::vector<std::string> _chooseTags(std::string acaption);
+  // Choose Categories
+  std::vector<std::string> _chooseCategories(std::string acaption);
+  // Choose date
+  types::date _chooseDate(std::string acaption,
+                          types::date adate = types::date());
+  // Input text
+  std::string _chooseText(std::string acaption, std::string atext);
 
 public:
   // Constructor
