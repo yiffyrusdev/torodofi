@@ -147,12 +147,32 @@ void App::_editTask(unsigned aid) {
         logic::joinString(task->getTags(), tasks::task_field_inner_delimiter);
     prompt = "New Tag list";
     options = "";
+    cmd = _caption_based_menu(caption, options, prompt);
+    cmd +=
+        " -filter \"" +
+        logic::joinString(task->getTags(), tasks::task_field_inner_delimiter) +
+        "\"";
+    status = logic::execCommand(cmd);
+    choice = status.output;
+    choice = choice.substr(0, choice.length() - 1); // remove \n from end line
+    task->setTags(
+        logic::splitString(choice, tasks::task_field_inner_delimiter));
 
   } else if (choice == edit_task_options[3]) { // 3 Categories
     caption = logic::joinString(task->getCategories(),
                                 tasks::task_field_inner_delimiter);
     prompt = "New Category list";
     options = "";
+    cmd = _caption_based_menu(caption, options, prompt);
+    cmd += " -filter \"" +
+           logic::joinString(task->getCategories(),
+                             tasks::task_field_inner_delimiter) +
+           "\"";
+    status = logic::execCommand(cmd);
+    choice = status.output;
+    choice = choice.substr(0, choice.length() - 1); // remove \n from end line
+    task->setCategories(
+        logic::splitString(choice, tasks::task_field_inner_delimiter));
   }
 }
 
