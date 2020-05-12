@@ -11,9 +11,13 @@
 namespace toro {
 namespace app {
 
+const std::string msg0 = "\nChoose the necessary options from the listed "
+                         "below:\nShift+Enter for multiple selection\n";
+
 const std::string rofi_options_delimiter = tasks::string_repr_delimiter;
 
 const std::string menu_back = "< Back";
+const std::string menu_empty = "---";
 
 const std::vector<std::string> any_menu_actions = {menu_back};
 
@@ -38,7 +42,7 @@ protected:
   std::string _task_based_menu(tasks::Task atask,
                                std::vector<std::string> add_menu);
   std::string _caption_based_menu(std::string acaption, std::string add_menu,
-                                  std::string aprompt);
+                                  std::string aprompt, bool any_menu = true);
   // Show rofi window with active tasks list
   // return selected fiels string
   types::returnstatus _showActiveTasks();

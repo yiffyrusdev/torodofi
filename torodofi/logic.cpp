@@ -24,7 +24,7 @@ string joinString(vector<string> avector, string delimiter) {
   for (size_t s = 0; s < avector.size() - 1; s++) {
     result += avector[s] + delimiter;
   }
-  result += avector[avector.size() - 1];
+  result += avector[avector.size() - 1].c_str();
 
   return result;
 }

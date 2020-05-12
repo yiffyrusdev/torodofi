@@ -58,6 +58,8 @@ void App::Start() {
       // if choice == menu_back unneeded because of "edittask=false;"
     }
   }
+
+  _objTasks.Dump();
 }
 
 // protected
@@ -110,6 +112,7 @@ void App::_editTask(unsigned aid) {
   types::returnstatus status;
   string cmd;
   string choice, caption, options, prompt;
+  vector<string> tmp;
 
   cmd = _task_based_menu((*task), edit_task_options);
   status = logic::execCommand(cmd);
@@ -136,7 +139,7 @@ void App::_editTask(unsigned aid) {
       possible_s.push_back(possible_d[d].toString());
     }
     options = logic::joinString(possible_s, rofi_options_delimiter);
-    cmd = _caption_based_menu(caption, options, prompt);
+    cmd = _caption_based_menu(caption, options, prompt, false);
     status = logic::execCommand(cmd);
     choice = status.output;
     choice = choice.substr(0, choice.length() - 1); // remove \n from end line
@@ -144,33 +147,38 @@ void App::_editTask(unsigned aid) {
 
   } else if (choice == edit_task_options[2]) { // 2 Tags
     caption =
+        "Current: " +
         logic::joinString(task->getTags(), tasks::task_field_inner_delimiter);
+    caption += msg0;
     prompt = "New Tag list";
-    options = "";
-    cmd = _caption_based_menu(caption, options, prompt);
-    cmd +=
-        " -filter \"" +
-        logic::joinString(task->getTags(), tasks::task_field_inner_delimiter) +
-        "\"";
+    options = logic::joinString(_objTasks.getTags(), rofi_options_delimiter);
+    options += rofi_options_delimiter + menu_empty;
+    cmd = _caption_based_menu(caption, options, prompt, false);
+    cmd += " -multi-select ";
     status = logic::execCommand(cmd);
     choice = status.output;
     choice = choice.substr(0, choice.length() - 1); // remove \n from end line
+    tmp = logic::splitString(choice, rofi_options_delimiter);
+    choice = logic::joinString(tmp, tasks::task_field_inner_delimiter);
     task->setTags(
         logic::splitString(choice, tasks::task_field_inner_delimiter));
 
   } else if (choice == edit_task_options[3]) { // 3 Categories
-    caption = logic::joinString(task->getCategories(),
-                                tasks::task_field_inner_delimiter);
+    caption =
+        "Current: " + logic::joinString(task->getCategories(),
+                                        tasks::task_field_inner_delimiter);
+    caption += msg0;
     prompt = "New Category list";
-    options = "";
-    cmd = _caption_based_menu(caption, options, prompt);
-    cmd += " -filter \"" +
-           logic::joinString(task->getCategories(),
-                             tasks::task_field_inner_delimiter) +
-           "\"";
+    options =
+        logic::joinString(_objTasks.getCategories(), rofi_options_delimiter);
+    options += rofi_options_delimiter + menu_empty;
+    cmd = _caption_based_menu(caption, options, prompt, false);
+    cmd += " -multi-select ";
     status = logic::execCommand(cmd);
     choice = status.output;
     choice = choice.substr(0, choice.length() - 1); // remove \n from end line
+    tmp = logic::splitString(choice, rofi_options_delimiter);
+    choice = logic::joinString(tmp, tasks::task_field_inner_delimiter);
     task->setCategories(
         logic::splitString(choice, tasks::task_field_inner_delimiter));
   }
@@ -205,18 +213,20 @@ string App::_task_based_menu(tasks::Task atask, vector<string> add_menu) {
 }
 
 string App::_caption_based_menu(string acaption, string add_menu,
-                                string aprompt) {
+                                string aprompt, bool any_menu) {
   types::config _config = _objConfig.getConfig();
 
   string cmd;
 
   cmd = "echo -e \"";
-  cmd += logic::joinString(any_menu_actions, rofi_options_delimiter) +
-         rofi_options_delimiter;
+  if (any_menu) {
+    cmd += logic::joinString(any_menu_actions, rofi_options_delimiter) +
+           rofi_options_delimiter;
+  }
   cmd += add_menu + "\" | ";
   cmd += _config.exec.rofi + " ";
   cmd += "-dmenu -p \"" + aprompt + "\" ";
-  cmd += "-mesg " + acaption;
+  cmd += "-mesg \"" + acaption + "\"";
 
   return cmd;
 }
@@ -225,11 +235,10 @@ void App::_readConfig(string afilename) {
   _objConfig.readFile(afilename);
   types::config _config = _objConfig.getConfig();
 
-  active_tasks_caption = "\"Have a nice day!\n";
+  active_tasks_caption = "Have a nice day!\n";
   active_tasks_caption += _config.keys.kb_new_task + "to add new task\n";
   active_tasks_caption += _config.keys.kb_active_done + "to view done tasks\n";
   active_tasks_caption += _config.keys.kb_task_agenda + "to view agenda";
-  active_tasks_caption += "\"";
 }
 
 void App::_readTasks(string afilename) { _objTasks.readFile(afilename); }

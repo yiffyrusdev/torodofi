@@ -17,6 +17,8 @@ const std::string string_repr_delimiter = "\n";
 class TaskContainer {
 protected:
   std::vector<Task> _tasks;
+  std::vector<std::string> _categories;
+  std::vector<std::string> _tags;
   std::string _filename;
 
   // Sort containered Tasks by priority;
@@ -37,10 +39,19 @@ public:
   void readFile(std::string afilename);
   // Dump task to a file back
   void Dump(std::string afilename = "");
+  // Add new category
+  void addCategory(std::string acat);
+  void addCategory(std::vector<std::string> acats);
+  // Add new tag
+  void addTag(std::string atag);
+  void addTag(std::vector<std::string> atags);
   // Repr task container as formatted string with delimiter
   std::string toString(std::string delimiter = string_repr_delimiter);
 
+  // getters
   std::vector<Task> getTasks();
+  std::vector<std::string> getTags();
+  std::vector<std::string> getCategories();
   Task *getTask(size_t index);
 };
 

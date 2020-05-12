@@ -40,6 +40,7 @@ void TaskContainer::readFile(string afilename) {
   size_t pri_del_len = priority_start_point.length();
   string line;
   unsigned priority;
+  vector<string> tmp;
   ifstream file(afilename);
 
   if (file.is_open()) {
@@ -61,9 +62,38 @@ void TaskContainer::readFile(string afilename) {
     for (size_t i = 0; i < _tasks.size(); i++) {
       _tasks[i]._setId(i);
     }
+    // Aggregate all tags and categories
+    for (size_t t = 0; t < _tasks.size(); t++) {
+      addTag(_tasks[t].getTags());
+      addCategory(_tasks[t].getCategories());
+    }
   } else {
     printf("tasks::TaskContainer: string afilename: %s\n", afilename.c_str());
     throw std::invalid_argument("File could not be opened");
+  }
+}
+
+void TaskContainer::addCategory(string acat) {
+  if (find(_categories.begin(), _categories.end(), acat) == _categories.end()) {
+    _categories.push_back(acat);
+  }
+}
+
+void TaskContainer::addCategory(vector<string> acats) {
+  for (size_t i = 0; i < acats.size(); i++) {
+    addCategory(acats[i]);
+  }
+}
+
+void TaskContainer::addTag(string atag) {
+  if (find(_tags.begin(), _tags.end(), atag) == _tags.end()) {
+    _tags.push_back(atag);
+  }
+}
+
+void TaskContainer::addTag(vector<string> atags) {
+  for (size_t i = 0; i < atags.size(); i++) {
+    addTag(atags[i]);
   }
 }
 
@@ -77,6 +107,15 @@ string TaskContainer::toString(string delimiter) {
 
   return logic::linuxColumns(result, delimiter);
 }
+// getters
+vector<string> TaskContainer::getTags() {
+  for (size_t s = 0; s < _tags.size(); s++) {
+    printf("%s\n", _tags[s].c_str());
+  }
+  return _tags;
+}
+
+vector<string> TaskContainer::getCategories() { return _categories; }
 
 vector<Task> TaskContainer::getTasks() { return _tasks; }
 Task *TaskContainer::getTask(size_t index) { return &_tasks[index]; }
