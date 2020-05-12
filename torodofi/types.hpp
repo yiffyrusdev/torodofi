@@ -48,6 +48,11 @@ public:
   date &operator=(std::string gnudate);
 };
 
+struct returnstatus {
+  int code;           // return code
+  std::string output; // output
+};
+
 struct task {
   unsigned id; // calculates automatically, task string does not contain ID
   unsigned priority; // priority have to be passed in cunstructor as constant
