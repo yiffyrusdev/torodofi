@@ -59,13 +59,23 @@ vector<string> Task::_validate_and_pass(string atask) {
   }
 }
 
-string Task::toString() {
+string Task::toFileString() {
   vector<string> vectorized = {
       _task.creation_date.c_str(), _task.expire_date.c_str(),
       logic::joinString(_task.tags, task_field_inner_delimiter),
       logic::joinString(_task.categories, task_field_inner_delimiter),
       _task.text};
   return task_start_point + logic::joinString(vectorized, task_field_delimiter);
+}
+
+string Task::toString(string delimiter) {
+  string result = to_string(_task.id) + delimiter;
+  result += _task.text + delimiter;
+  result += _task.expire_date.toString() + delimiter;
+  result += logic::joinString(_task.tags, ",") + delimiter;
+  result += logic::joinString(_task.categories, ",");
+
+  return result;
 }
 
 // getters

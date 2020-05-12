@@ -34,6 +34,8 @@ public:
   TaskContainer(std::string afilename);
   // Dump task to a file back
   void Dump(std::string afilename = "");
+  // Repr task container as formatted string with delimiter
+  std::string toString(std::string delimiter = "\n");
 
   std::vector<Task> getTasks();
 };

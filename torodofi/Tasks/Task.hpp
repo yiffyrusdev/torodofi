@@ -27,8 +27,11 @@ public:
   // * creation_date expire_date tags categories text
   // * yyyy-mm-dd yyyy-mm-dd tag,tag,tag cat,cat text text text
   Task(std::string taskstring, unsigned priority = 3);
-  // Repr task as formatted string
-  std::string toString();
+  // Repr task as formatted string for writing to a .md file
+  std::string toFileString();
+  // Repr task as human-readable formatted string
+  // id\t text\t expire_date\t tags\t categories
+  std::string toString(std::string delimiter = "\t");
   // getters
   types::task getTask();
   // setters

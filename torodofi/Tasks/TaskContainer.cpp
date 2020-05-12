@@ -57,12 +57,23 @@ void TaskContainer::Dump(std::string afilename) {
         priority = cmptask.getTask().priority;
         file << priority_start_point + to_string(priority) << endl;
       }
-      file << cmptask.toString() << endl;
+      file << cmptask.toFileString() << endl;
     }
   } else {
     printf("string afilename: %s\n", afilename.c_str());
     throw std::runtime_error("Bad IO: could not create file");
   }
+}
+
+string TaskContainer::toString(string delimiter) {
+  string result;
+
+  for (size_t t = 0; t < _tasks.size() - 1; t++) {
+    result += _tasks[t].toString() + delimiter;
+  }
+  result += _tasks[_tasks.size() - 1].toString();
+
+  return logic::linuxColumns(result, delimiter);
 }
 
 vector<Task> TaskContainer::getTasks() { return _tasks; }
