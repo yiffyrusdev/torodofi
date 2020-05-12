@@ -30,10 +30,12 @@ public:
   // Repr task as formatted string for writing to a .md file
   std::string toFileString();
   // Repr task as human-readable formatted string
-  // id\t text\t expire_date\t tags\t categories (50 spaces) id
+  // id\t text\t expire_date\t tags\t categories
   std::string toString(std::string delimiter = "\t");
   // getters
   types::task getTask();
+  unsigned getPriority();
+  unsigned getId();
   // setters
   void _setId(unsigned aid); // Do not use it if you are not me =)
   void setPriority(unsigned apriority);

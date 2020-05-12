@@ -73,14 +73,15 @@ string Task::toString(string delimiter) {
   result += _task.text + delimiter;
   result += _task.expire_date.toString() + delimiter;
   result += logic::joinString(_task.tags, ",") + delimiter;
-  result += logic::joinString(_task.categories, ",") + string(50, ' ');
-  result += to_string(_task.id);
+  result += logic::joinString(_task.categories, ",");
 
   return result;
 }
 
 // getters
 types::task Task::getTask() { return _task; }
+unsigned Task::getPriority() { return _task.priority; }
+unsigned Task::getId() { return _task.id; }
 // setters
 void Task::_setId(unsigned int aid) { _task.id = aid; }
 void Task::setPriority(unsigned apriority) { _task.priority = apriority; }
