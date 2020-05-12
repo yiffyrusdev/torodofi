@@ -19,9 +19,30 @@ void App::Start() { string out = _showActiveTasks(); }
 
 string App::_showActiveTasks() {
   types::returnstatus status;
-  string cmd = "echo -e \"" + _objTasks.toString() + "\" | ";
+  string cmd;
 
-  cmd += _config.exec.rofi;
+  vector<string> high_priorities;
+  vector<string> medi_priorities;
+  unsigned task_priority;
+
+  // Tasts already sorted by priority!
+  for (size_t t = 0; t < _tasks.size(); t++) {
+    switch (_tasks[t].getPriority()) {
+    case 1:
+      high_priorities.push_back(to_string(_tasks[t].getId()));
+      break;
+    case 2:
+      medi_priorities.push_back(to_string(_tasks[t].getId()));
+      break;
+    }
+  }
+
+  cmd = "echo -e \"" + _objTasks.toString() + "\" | " + _config.exec.rofi + " ";
+  cmd += "-u " + logic::joinString(high_priorities, ",") + " ";
+  cmd += "-a " + logic::joinString(medi_priorities, ",") + " ";
+
+  printf("%s\n", cmd.c_str());
+
   status = logic::execCommand(cmd);
   printf("%s\n", status.output.c_str());
   return status.output;
