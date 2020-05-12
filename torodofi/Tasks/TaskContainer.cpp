@@ -10,8 +10,16 @@ void TaskContainer::_sort_priority() {
 }
 
 // class TaskContainer
-TaskContainer::TaskContainer() {}
-TaskContainer::TaskContainer(string afilename) { readFile(afilename); }
+TaskContainer::TaskContainer() {
+  _tags = {no_tag};
+  _categories = {no_category};
+}
+TaskContainer::TaskContainer(string afilename) {
+  _tags = {no_tag};
+  _categories = {no_category};
+
+  readFile(afilename);
+}
 
 void TaskContainer::Dump(std::string afilename) {
   if (afilename == "") {
@@ -80,8 +88,12 @@ void TaskContainer::addCategory(string acat) {
 }
 
 void TaskContainer::addCategory(vector<string> acats) {
-  for (size_t i = 0; i < acats.size(); i++) {
-    addCategory(acats[i]);
+  if (acats.size() > 0) {
+    for (size_t i = 0; i < acats.size(); i++) {
+      if (acats[i] != empty_category) {
+        addCategory(acats[i]);
+      }
+    }
   }
 }
 
@@ -92,8 +104,12 @@ void TaskContainer::addTag(string atag) {
 }
 
 void TaskContainer::addTag(vector<string> atags) {
-  for (size_t i = 0; i < atags.size(); i++) {
-    addTag(atags[i]);
+  if (atags.size() > 0) {
+    for (size_t i = 0; i < atags.size(); i++) {
+      if (atags[i] != empty_tag) {
+        addTag(atags[i]);
+      }
+    }
   }
 }
 

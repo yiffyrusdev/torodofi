@@ -95,9 +95,19 @@ void Task::setExpire(types::date adate) {
     _task.expire_date = adate;
   }
 }
-void Task::setTags(std::vector<std::string> atags) { _task.tags = atags; }
+void Task::setTags(std::vector<std::string> atags) {
+  if (atags.size() > 0) {
+    _task.tags = atags;
+  } else {
+    _task.tags = vector<string>() = {empty_tag};
+  }
+}
 void Task::setCategories(std::vector<std::string> acategories) {
-  _task.categories = acategories;
+  if (acategories.size() > 0) {
+    _task.categories = acategories;
+  } else {
+    _task.categories = vector<string>() = {empty_category};
+  }
 }
 void Task::setText(std::string atext) { _task.text = atext; }
 

@@ -14,6 +14,11 @@ const std::string task_start_point = "* ";
 const std::string task_field_delimiter = " ";
 const std::string task_field_inner_delimiter = ",";
 
+const std::string no_tag = "---";       // Normal if no tags
+const std::string no_category = "---";  // Normal if no categoried
+const std::string empty_tag = ".";      // This is anomal tag! Caused by err
+const std::string empty_category = "."; // This is anomal tag! Caused by err
+
 class Task {
 protected:
   types::task _task;

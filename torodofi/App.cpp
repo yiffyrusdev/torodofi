@@ -27,6 +27,9 @@ void App::Start() {
 
   while (showactive) {
     status = _showActiveTasks();
+    if (status.code != 0) {
+      return;
+    }
     choice = status.output;
     choice = choice.substr(0, choice.length() - 1); // remove \n symbol
     if (choice == menu_back) {
@@ -131,7 +134,9 @@ void App::_editTask(unsigned aid) {
     caption += msg0;
 
     tmp = _chooseTags(caption);
-    task->setTags(tmp);
+    if (tmp.size() > 0) {
+      task->setTags(tmp);
+    }
 
   } else if (choice == edit_task_options[3]) { // 3 Categories
     caption =
@@ -140,7 +145,9 @@ void App::_editTask(unsigned aid) {
     caption += msg0;
 
     tmp = _chooseCategories(caption);
-    task->setCategories(tmp);
+    if (tmp.size() > 0) {
+      task->setCategories(tmp);
+    }
   }
 }
 
@@ -191,7 +198,6 @@ vector<string> App::_chooseTags(string acaption) {
   vector<string> tags;
 
   options = logic::joinString(_objTasks.getTags(), rofi_options_delimiter);
-  options += rofi_options_delimiter + menu_empty;
   cmd = _caption_based_menu(acaption, options, "", false);
   cmd += " -multi-select ";
   status = logic::execCommand(cmd);
@@ -200,6 +206,8 @@ vector<string> App::_chooseTags(string acaption) {
     choice = choice.substr(0, choice.length() - 1); // remove \n from end line
     tags = logic::splitString(choice, rofi_options_delimiter);
     _objTasks.addTag(tags);
+  } else {
+    tags = {};
   }
 
   return tags;
@@ -212,7 +220,6 @@ vector<string> App::_chooseCategories(string acaption) {
 
   options =
       logic::joinString(_objTasks.getCategories(), rofi_options_delimiter);
-  options += rofi_options_delimiter + menu_empty;
   cmd = _caption_based_menu(acaption, options, "", false);
   cmd += " -multi-select ";
   status = logic::execCommand(cmd);
@@ -221,6 +228,8 @@ vector<string> App::_chooseCategories(string acaption) {
     choice = choice.substr(0, choice.length() - 1); // remove \n from end line
     categories = logic::splitString(choice, rofi_options_delimiter);
     _objTasks.addCategory(categories);
+  } else {
+    categories = {};
   }
 
   return categories;
