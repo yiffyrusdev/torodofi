@@ -13,11 +13,16 @@ protected:
   unsigned short _year;
   unsigned short _month;
   unsigned short _day;
+  bool _bissextile;
   // constructor internals
   void _real_constructor(std::string yyyymmdd);
   // Check if date valid and pass values to members
   bool _validate_and_pass(unsigned short yyyy, unsigned short mm,
                           unsigned short dd);
+
+  // 0 - for February of високосный year
+  unsigned short _days_in_months[13] = {29, 31, 28, 31, 30, 31, 30,
+                                        31, 31, 30, 31, 30, 31};
 
 public:
   // Empty constructor
@@ -26,6 +31,11 @@ public:
   date(std::string yyyy_mm_dd_date);
   // 2020,05,11 integers
   date(unsigned year, unsigned month, unsigned day);
+
+  // Return vector<date> of dates before current
+  std::vector<date> vectorBefore(size_t acount);
+  // Return vector<date> of dates after current
+  std::vector<date> vectorAfter(size_t acount);
 
   // Return GNU date String value
   std::string toString();
@@ -38,6 +48,10 @@ public:
   unsigned short getDay();
 
   // Operators
+  // do NOT add more than 14 days
+  date operator+(unsigned short adays);
+  // do NOT add more than 14 days
+  date operator-(unsigned short adays);
   bool operator==(date &other);
   bool operator>(date &other);
   bool operator<(date &other);
