@@ -48,11 +48,31 @@ public:
   date &operator=(std::string gnudate);
 };
 
+// return code & stdoutput type
 struct returnstatus {
   int code;           // return code
   std::string output; // output
 };
 
+// config::Config _config type
+struct keysset {              // hotkeys
+  std::string kb_active_done; // switch between active and done tasks
+  std::string kb_task_agenda; // switch between tasklist and agenda
+  std::string kb_new_task;    // add new task
+};
+struct execset {    // executable commands
+  std::string rofi; // rofi GUI command
+};
+struct pathset {        // pathes of files to read
+  std::string taskfile; // path to .md file with tasks
+};
+struct config {
+  keysset keys; // hotkeys
+  execset exec; // executable commands
+  pathset path; // pathes to files to read
+};
+
+// tasks::Task _task type
 struct task {
   unsigned id; // calculates automatically, task string does not contain ID
   unsigned priority; // priority have to be passed in cunstructor as constant
