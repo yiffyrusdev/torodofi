@@ -79,6 +79,7 @@ string TaskContainer::toString(string delimiter) {
 }
 
 vector<Task> TaskContainer::getTasks() { return _tasks; }
+Task *TaskContainer::getTask(size_t index) { return &_tasks[index]; }
 
 } // namespace tasks
 } // namespace toro

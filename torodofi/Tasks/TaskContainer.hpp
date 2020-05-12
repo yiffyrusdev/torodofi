@@ -41,6 +41,7 @@ public:
   std::string toString(std::string delimiter = string_repr_delimiter);
 
   std::vector<Task> getTasks();
+  Task *getTask(size_t index);
 };
 
 } // namespace tasks
