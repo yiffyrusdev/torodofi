@@ -11,7 +11,32 @@ void TaskContainer::_sort_priority() {
 
 // class TaskContainer
 TaskContainer::TaskContainer() {}
-TaskContainer::TaskContainer(string afilename) {
+TaskContainer::TaskContainer(string afilename) { readFile(afilename); }
+
+void TaskContainer::Dump(std::string afilename) {
+  if (afilename == "") {
+    afilename = _filename;
+  }
+  unsigned priority;
+  Task cmptask;
+  ofstream file(afilename);
+
+  if (file.is_open()) {
+    for (size_t t = 0; t < _tasks.size(); t++) {
+      cmptask = _tasks[t];
+      if (cmptask.getTask().priority != priority) {
+        priority = cmptask.getTask().priority;
+        file << priority_start_point + to_string(priority) << endl;
+      }
+      file << cmptask.toFileString() << endl;
+    }
+  } else {
+    printf("tasks::TaskContainer: string afilename: %s\n", afilename.c_str());
+    throw std::runtime_error("Bad IO: could not create file");
+  }
+}
+
+void TaskContainer::readFile(string afilename) {
   size_t pri_del_len = priority_start_point.length();
   string line;
   unsigned priority;
@@ -37,31 +62,8 @@ TaskContainer::TaskContainer(string afilename) {
       _tasks[i]._setId(i);
     }
   } else {
-    printf("string afilename: %s\n", afilename.c_str());
+    printf("tasks::TaskContainer: string afilename: %s\n", afilename.c_str());
     throw std::invalid_argument("File could not be opened");
-  }
-}
-
-void TaskContainer::Dump(std::string afilename) {
-  if (afilename == "") {
-    afilename = _filename;
-  }
-  unsigned priority;
-  Task cmptask;
-  ofstream file(afilename);
-
-  if (file.is_open()) {
-    for (size_t t = 0; t < _tasks.size(); t++) {
-      cmptask = _tasks[t];
-      if (cmptask.getTask().priority != priority) {
-        priority = cmptask.getTask().priority;
-        file << priority_start_point + to_string(priority) << endl;
-      }
-      file << cmptask.toFileString() << endl;
-    }
-  } else {
-    printf("string afilename: %s\n", afilename.c_str());
-    throw std::runtime_error("Bad IO: could not create file");
   }
 }
 

@@ -73,7 +73,8 @@ string Task::toString(string delimiter) {
   result += _task.text + delimiter;
   result += _task.expire_date.toString() + delimiter;
   result += logic::joinString(_task.tags, ",") + delimiter;
-  result += logic::joinString(_task.categories, ",");
+  result += logic::joinString(_task.categories, ",") + string(50, ' ');
+  result += to_string(_task.id);
 
   return result;
 }

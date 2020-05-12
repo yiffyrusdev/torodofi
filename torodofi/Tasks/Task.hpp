@@ -30,7 +30,7 @@ public:
   // Repr task as formatted string for writing to a .md file
   std::string toFileString();
   // Repr task as human-readable formatted string
-  // id\t text\t expire_date\t tags\t categories
+  // id\t text\t expire_date\t tags\t categories (50 spaces) id
   std::string toString(std::string delimiter = "\t");
   // getters
   types::task getTask();

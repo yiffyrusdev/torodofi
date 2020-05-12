@@ -32,6 +32,8 @@ public:
   // ......
   // ## (x) means (x) priority of listed tasks
   TaskContainer(std::string afilename);
+  // Read tasks file
+  void readFile(std::string afilename);
   // Dump task to a file back
   void Dump(std::string afilename = "");
   // Repr task container as formatted string with delimiter
