@@ -82,6 +82,11 @@ string Task::toString(string delimiter) {
 types::task Task::getTask() { return _task; }
 unsigned Task::getPriority() { return _task.priority; }
 unsigned Task::getId() { return _task.id; }
+std::string Task::getText() { return _task.text; }
+types::date Task::getCreation() { return _task.creation_date; }
+types::date Task::getExpire() { return _task.expire_date; }
+std::vector<std::string> Task::getTags() { return _task.tags; }
+std::vector<std::string> Task::getCategories() { return _task.categories; }
 // setters
 void Task::_setId(unsigned int aid) { _task.id = aid; }
 void Task::setPriority(unsigned apriority) { _task.priority = apriority; }

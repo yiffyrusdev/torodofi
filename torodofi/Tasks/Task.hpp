@@ -36,6 +36,11 @@ public:
   types::task getTask();
   unsigned getPriority();
   unsigned getId();
+  std::string getText();
+  types::date getCreation();
+  types::date getExpire();
+  std::vector<std::string> getTags();
+  std::vector<std::string> getCategories();
   // setters
   void _setId(unsigned aid); // Do not use it if you are not me =)
   void setPriority(unsigned apriority);

@@ -12,6 +12,7 @@ namespace toro {
 namespace tasks {
 
 const std::string priority_start_point = "## ";
+const std::string string_repr_delimiter = "\n";
 
 class TaskContainer {
 protected:
@@ -37,7 +38,7 @@ public:
   // Dump task to a file back
   void Dump(std::string afilename = "");
   // Repr task container as formatted string with delimiter
-  std::string toString(std::string delimiter = "\n");
+  std::string toString(std::string delimiter = string_repr_delimiter);
 
   std::vector<Task> getTasks();
 };
