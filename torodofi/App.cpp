@@ -118,12 +118,18 @@ void App::_editTask(unsigned aid) {
   choice = choice.substr(0, choice.length() - 1); // remove \n from end line
   if (choice == edit_task_options[0]) {           // 0 Text
     caption = task->getText();
-    prompt = "Enter new text";
-    options = "";
+    prompt = "New Text";
+    options = task->getText();
+    cmd = _caption_based_menu(caption, options, prompt);
+    cmd += " -filter \"" + task->getText() + "\"";
+    status = logic::execCommand(cmd);
+    choice = status.output;
+    choice = choice.substr(0, choice.length() - 1); // remove \n from end line
+    task->setText(choice);
 
   } else if (choice == edit_task_options[1]) { // 1 Deadline
     caption = task->getExpire().toString();
-    prompt = "Enter new Dedaline date";
+    prompt = "New Deadline date";
     vector<types::date> possible_d = task->getCreation().vectorAfter(730);
     vector<string> possible_s;
     for (size_t d = 0; d < possible_d.size(); d++) {
@@ -139,13 +145,13 @@ void App::_editTask(unsigned aid) {
   } else if (choice == edit_task_options[2]) { // 2 Tags
     caption =
         logic::joinString(task->getTags(), tasks::task_field_inner_delimiter);
-    prompt = "Enter new tag list";
+    prompt = "New Tag list";
     options = "";
 
   } else if (choice == edit_task_options[3]) { // 3 Categories
     caption = logic::joinString(task->getCategories(),
                                 tasks::task_field_inner_delimiter);
-    prompt = "Enter new category list";
+    prompt = "New Category list";
     options = "";
   }
 }
