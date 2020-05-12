@@ -105,7 +105,7 @@ string TaskContainer::toString(string delimiter) {
   }
   result += _tasks[_tasks.size() - 1].toString();
 
-  return logic::linuxColumns(result, delimiter);
+  return logic::linuxColumns(result);
 }
 // getters
 vector<string> TaskContainer::getTags() {
