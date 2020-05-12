@@ -1,8 +1,0 @@
-switch_task_agenda: Alt+a
-switch_active_done: Alt+Tab
-add_new_task: Alt+n
-
-
-rofi: rofi -lines 30 -width 1500 -theme Arc-Dark
-browser: firefox
-notefile: example_tasks.md
