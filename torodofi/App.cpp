@@ -181,6 +181,7 @@ void App::_editTask(unsigned aid) {
 
   } else if (choice == edit_task_options[5]) { // 5 Delete
     _objTasks.delTask(task->getId());
+    _objTasks.sortByPriority();
   }
 }
 
