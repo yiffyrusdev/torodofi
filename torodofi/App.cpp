@@ -18,7 +18,9 @@ void App::Start() {
   unsigned choice_id;
   types::returnstatus status;
 
-  bool showactive = true;
+  bool showtasks = true;
+  bool showtasks_active = true;
+
   bool showtask = false;
   bool edittask = false;
 
@@ -27,11 +29,11 @@ void App::Start() {
   vector<string> new_tags, new_categories;
   unsigned new_prioroty;
 
-  while (showactive) {
-    status = _showActiveTasks();
-    printf("%d\n", status.code);
+  while (showtasks) {
+    status = _showTasks(showtasks_active);
+    // printf("%d\n", status.code);
     switch (status.code) {
-    case 10: // kb-custom-1
+    case 3072: // kb-custom-1
       break;
     case 2816: // kb-custom-2
       new_text = _chooseText("Enter new task text!", "Task");
@@ -43,14 +45,16 @@ void App::Start() {
       _objTasks.addTask(new_text, new_date, new_tags, new_categories,
                         new_prioroty);
       break;
-    case 12: // kb-custom-3
+    case 2560: // kb-custom-3
+      showtasks_active = !showtasks_active;
       break;
     case 0:
       choice = status.output;
       choice = choice.substr(0, choice.length() - 1); // remove \n symbol
       if (choice == menu_back) {
-        showactive = false;
+        showtasks = false;
       } else {
+        // Is it an ungly hack after deleting "< Back" option?
         choice_id = atoi(logic::splitString(choice)[0].c_str());
         showtask = true;
       }
@@ -88,11 +92,11 @@ void App::Start() {
 
 void App::_exit() { _objTasks.Dump(); }
 
-types::returnstatus App::_showActiveTasks() {
+types::returnstatus App::_showTasks(bool is_active) {
   vector<tasks::Task> tasks = _objTasks.getTasks();
   size_t prio_offset = any_menu_actions.size();
   types::returnstatus status;
-  string cmd;
+  string cmd, prompt;
   vector<string> high_priorities;
   vector<string> medi_priorities;
   unsigned task_priority;
@@ -101,17 +105,20 @@ types::returnstatus App::_showActiveTasks() {
   for (size_t t = 0; t < tasks.size(); t++) {
     string cmd;
 
-    switch (tasks[t].getPriority()) {
-    case 1:
-      high_priorities.push_back(to_string(tasks[t].getId() + prio_offset));
-      break;
-    case 2:
-      medi_priorities.push_back(to_string(tasks[t].getId() + prio_offset));
-      break;
+    if (tasks[t].getActive()) {
+      switch (tasks[t].getPriority()) {
+      case 1:
+        high_priorities.push_back(to_string(tasks[t].getId() + prio_offset));
+        break;
+      case 2:
+        medi_priorities.push_back(to_string(tasks[t].getId() + prio_offset));
+        break;
+      }
     }
   }
-  cmd = _caption_based_menu(active_tasks_caption, _objTasks.toString(),
-                            "Active", false, kb_customs) +
+  prompt = (is_active) ? "Active" : "Done";
+  cmd = _caption_based_menu(active_tasks_caption, _objTasks.toString(is_active),
+                            prompt, false, kb_customs) +
         " ";
   if (high_priorities.size() > 0) {
     cmd += "-u " + logic::joinString(high_priorities, ",") + " ";

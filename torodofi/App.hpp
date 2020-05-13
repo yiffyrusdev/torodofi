@@ -48,7 +48,7 @@ protected:
                                   std::string custom_rofi_keys = "");
   // Show rofi window with active tasks list
   // return selected fiels string
-  types::returnstatus _showActiveTasks();
+  types::returnstatus _showTasks(bool is_active);
   // Show rofi window with one Task information
   // return selected action string
   types::returnstatus _showOneTask(unsigned aid);

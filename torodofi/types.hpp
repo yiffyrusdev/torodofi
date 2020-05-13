@@ -91,8 +91,11 @@ struct config {
 
 // tasks::Task _task type
 struct task {
+  bool is_active; // is task active(true) or done(false)
+
   unsigned id; // calculates automatically, task string does not contain ID
   unsigned priority; // priority have to be passed in cunstructor as constant
+
   types::date creation_date;           // date of creation
   types::date expire_date;             // deadline date
   std::vector<std::string> tags;       // marked with tags

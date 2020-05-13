@@ -33,13 +33,15 @@ Task::Task(string atask, unsigned apriority) {
   vector<string> tags;
   vector<string> categories;
   string text;
+  bool is_active;
   vector<string> vector_text;
 
   creation_date = types::date(parsed_task[0]);
   expire_date = types::date(parsed_task[1]);
   tags = logic::splitString(parsed_task[2], task_field_inner_delimiter);
   categories = logic::splitString(parsed_task[3], task_field_inner_delimiter);
-  vector_text = vector<string>(parsed_task.begin() + 4, parsed_task.end());
+  vector_text = vector<string>(parsed_task.begin() + 4, parsed_task.end() - 1);
+  is_active = (parsed_task[parsed_task.size() - 1] == "1") ? true : false;
   text = logic::joinString(vector_text);
 
   setPriority(apriority);
@@ -47,16 +49,31 @@ Task::Task(string atask, unsigned apriority) {
   setExpire(expire_date);
   setTags(tags);
   setCategories(categories);
+  setActive(is_active);
   setText(text);
 }
 
 vector<string> Task::_validate_and_pass(string atask) {
-  short start_pos = atask.find(task_start_point);
+  short active_start_pos = atask.find(task_start_point_active);
+  short done_start_pos = atask.find(task_start_point_done);
+  short start_pos;
+  string start_point, is_active;
   vector<string> parsed_task;
 
+  if (active_start_pos >= 0) {
+    start_pos = active_start_pos;
+    start_point = task_start_point_active;
+    is_active = "1";
+  } else if (done_start_pos >= 0) {
+    start_pos = done_start_pos;
+    start_point = task_start_point_done;
+    is_active = "0";
+  }
+
   if (start_pos >= 0) {
-    start_pos += task_start_point.length();
+    start_pos += start_point.length();
     parsed_task = logic::splitString(atask.substr(start_pos));
+    parsed_task.push_back(is_active);
     if (parsed_task.size() >= 5) {
       return parsed_task;
     } else {
@@ -70,12 +87,16 @@ vector<string> Task::_validate_and_pass(string atask) {
 }
 
 string Task::toFileString() {
+  string start_point;
   vector<string> vectorized = {
       _task.creation_date.c_str(), _task.expire_date.c_str(),
       logic::joinString(_task.tags, task_field_inner_delimiter),
       logic::joinString(_task.categories, task_field_inner_delimiter),
       _task.text};
-  return task_start_point + logic::joinString(vectorized, task_field_delimiter);
+
+  start_point =
+      (_task.is_active) ? task_start_point_active : task_start_point_done;
+  return start_point + logic::joinString(vectorized, task_field_delimiter);
 }
 
 string Task::toString(string delimiter) {
@@ -92,12 +113,14 @@ string Task::toString(string delimiter) {
 types::task Task::getTask() { return _task; }
 unsigned Task::getPriority() { return _task.priority; }
 unsigned Task::getId() { return _task.id; }
+bool Task::getActive() { return _task.is_active; }
 std::string Task::getText() { return _task.text; }
 types::date Task::getCreation() { return _task.creation_date; }
 types::date Task::getExpire() { return _task.expire_date; }
 std::vector<std::string> Task::getTags() { return _task.tags; }
 std::vector<std::string> Task::getCategories() { return _task.categories; }
 // setters
+void Task::setActive(bool is_active) { _task.is_active = is_active; }
 void Task::_setId(unsigned int aid) { _task.id = aid; }
 void Task::setPriority(unsigned apriority) { _task.priority = apriority; }
 void Task::setExpire(types::date adate) {

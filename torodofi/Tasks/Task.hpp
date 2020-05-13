@@ -10,7 +10,8 @@
 namespace toro {
 namespace tasks {
 
-const std::string task_start_point = "* ";
+const std::string task_start_point_active = "- ";
+const std::string task_start_point_done = "+ ";
 const std::string task_field_delimiter = " ";
 const std::string task_field_inner_delimiter = ",";
 
@@ -46,12 +47,14 @@ public:
   types::task getTask();
   unsigned getPriority();
   unsigned getId();
+  bool getActive();
   std::string getText();
   types::date getCreation();
   types::date getExpire();
   std::vector<std::string> getTags();
   std::vector<std::string> getCategories();
   // setters
+  void setActive(bool is_active);
   void _setId(unsigned aid); // Do not use it if you are not me =)
   void setPriority(unsigned apriority);
   void setExpire(types::date adate);

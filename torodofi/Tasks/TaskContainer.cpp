@@ -53,7 +53,8 @@ void TaskContainer::readFile(string afilename) {
       if (line.find(priority_start_point) == 0) {
         priority = atoi(line.substr(pri_del_len, pri_del_len + 2).c_str());
       } else {
-        if (line.find(task_start_point) >= 0) {
+        if (line.find(task_start_point_active) >= 0 ||
+            line.find(task_start_point_done) >= 0) {
           _tasks.push_back(Task(line, priority));
         }
       }
@@ -121,13 +122,17 @@ void TaskContainer::addTag(vector<string> atags) {
   }
 }
 
-string TaskContainer::toString(string delimiter) {
+string TaskContainer::toString(bool is_active, string delimiter) {
   string result;
 
   for (size_t t = 0; t < _tasks.size() - 1; t++) {
-    result += _tasks[t].toString() + delimiter;
+    if (_tasks[t].getActive() == is_active) {
+      result += _tasks[t].toString() + delimiter;
+    }
   }
-  result += _tasks[_tasks.size() - 1].toString();
+  if (_tasks[_tasks.size() - 1].getActive() == is_active) {
+    result += _tasks[_tasks.size() - 1].toString();
+  }
 
   return logic::linuxColumns(result);
 }
