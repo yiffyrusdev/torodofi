@@ -5,13 +5,6 @@ using namespace std;
 namespace toro {
 namespace tasks {
 
-void TaskContainer::_sort_priority() {
-  sort(_tasks.begin(), _tasks.end(), cmp_prioroty);
-  for (size_t i = 0; i < _tasks.size(); i++) {
-    _tasks[i]._setId(i);
-  }
-}
-
 // class TaskContainer
 TaskContainer::TaskContainer() {
   _tags = {no_tag};
@@ -88,6 +81,14 @@ void TaskContainer::addTask(string atext, types::date expire,
   _sort_priority();
 }
 
+void TaskContainer::delTask(size_t aid) {
+  for (size_t i = 0; i < _tasks.size(); i++) {
+    if (_tasks[i].getId() == aid) {
+      _tasks.erase(_tasks.begin() + i);
+    }
+  }
+}
+
 void TaskContainer::addCategory(string acat) {
   if (find(_categories.begin(), _categories.end(), acat) == _categories.end()) {
     _categories.push_back(acat);
@@ -130,6 +131,17 @@ string TaskContainer::toString(string delimiter) {
 
   return logic::linuxColumns(result);
 }
+
+void TaskContainer::sortByPriority() { _sort_priority(); }
+
+// protected
+void TaskContainer::_sort_priority() {
+  sort(_tasks.begin(), _tasks.end(), cmp_prioroty);
+  for (size_t i = 0; i < _tasks.size(); i++) {
+    _tasks[i]._setId(i);
+  }
+}
+
 // getters
 vector<string> TaskContainer::getTags() {
   for (size_t s = 0; s < _tags.size(); s++) {

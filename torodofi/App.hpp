@@ -23,8 +23,8 @@ const std::vector<std::string> any_menu_actions = {menu_back};
 
 const std::vector<std::string> one_task_actions = {"0 Mark as done", "1 Edit"};
 
-const std::vector<std::string> edit_task_options = {"0 Text", "1 Deadline",
-                                                    "2 Tags", "3 Categories"};
+const std::vector<std::string> edit_task_options = {
+    "0 Text", "1 Deadline", "2 Priority", "3 Tags", "4 Categories", "5 Delete"};
 
 class App {
 protected:
@@ -33,6 +33,7 @@ protected:
   std::string active_tasks_caption;
   std::string kb_customs;
 
+  void _exit();
   // Read configuration file
   void _readConfig(std::string afilename);
   // Read .md file with tasks
@@ -61,6 +62,10 @@ protected:
                           types::date adate = types::date());
   // Input text
   std::string _chooseText(std::string acaption, std::string atext);
+
+  template <typename T>
+  // Sultiple choice
+  T _chooseFromVector(std::vector<T> avector, std::string acaption);
 
 public:
   // Constructor

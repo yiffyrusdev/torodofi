@@ -43,6 +43,8 @@ public:
   void addTask(std::string atext, types::date expire,
                std::vector<std::string> atags,
                std::vector<std::string> acategories, unsigned apriority);
+  // Delete task by id
+  void delTask(size_t aid);
   // Add new category
   void addCategory(std::string acat);
   void addCategory(std::vector<std::string> acats);
@@ -51,6 +53,9 @@ public:
   void addTag(std::vector<std::string> atags);
   // Repr task container as formatted string with delimiter
   std::string toString(std::string delimiter = string_repr_delimiter);
+
+  // sort tasks by priority
+  void sortByPriority();
 
   // getters
   std::vector<Task> getTasks();

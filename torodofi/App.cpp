@@ -73,14 +73,17 @@ void App::Start() {
       }
       break;
     default:
+      _exit();
       return;
     }
   }
 
-  _objTasks.Dump();
+  _exit();
 }
 
 // protected
+
+void App::_exit() { _objTasks.Dump(); }
 
 types::returnstatus App::_showActiveTasks() {
   vector<tasks::Task> tasks = _objTasks.getTasks();
@@ -130,7 +133,9 @@ void App::_editTask(unsigned aid) {
   types::returnstatus status;
   string cmd;
   string choice, caption, options, prompt;
-  vector<string> tmp;
+  vector<string> vstmp;
+  unsigned untmp;
+  types::date dtmp;
 
   cmd = _task_based_menu((*task), edit_task_options);
   status = logic::execCommand(cmd);
@@ -142,30 +147,38 @@ void App::_editTask(unsigned aid) {
     task->setText(choice);
 
   } else if (choice == edit_task_options[1]) { // 1 Deadline
-    types::date dch = _chooseDate("Choose new Deadline:\n", task->getExpire());
-    task->setExpire(dch);
+    dtmp = _chooseDate("Choose new Deadline:\n", task->getExpire());
+    task->setExpire(dtmp);
 
-  } else if (choice == edit_task_options[2]) { // 2 Tags
+  } else if (choice == edit_task_options[2]) { // Priority
+    untmp = _chooseFromVector(tasks::available_priorities, "Choose priority");
+    task->setPriority(untmp);
+    _objTasks.sortByPriority();
+
+  } else if (choice == edit_task_options[3]) { // 3 Tags
     caption =
         "Current: " +
         logic::joinString(task->getTags(), tasks::task_field_inner_delimiter);
     caption += msg0;
 
-    tmp = _chooseTags(caption);
-    if (tmp.size() > 0) {
-      task->setTags(tmp);
+    vstmp = _chooseTags(caption);
+    if (vstmp.size() > 0) {
+      task->setTags(vstmp);
     }
 
-  } else if (choice == edit_task_options[3]) { // 3 Categories
+  } else if (choice == edit_task_options[4]) { // 4 Categories
     caption =
         "Current: " + logic::joinString(task->getCategories(),
                                         tasks::task_field_inner_delimiter);
     caption += msg0;
 
-    tmp = _chooseCategories(caption);
-    if (tmp.size() > 0) {
-      task->setCategories(tmp);
+    vstmp = _chooseCategories(caption);
+    if (vstmp.size() > 0) {
+      task->setCategories(vstmp);
     }
+
+  } else if (choice == edit_task_options[5]) { // 5 Delete
+    _objTasks.delTask(task->getId());
   }
 }
 
@@ -251,6 +264,29 @@ vector<string> App::_chooseCategories(string acaption) {
   }
 
   return categories;
+}
+
+template <typename T>
+//
+T App::_chooseFromVector(vector<T> avector, string acaption) {
+  string options, cmd;
+  vector<string> svector;
+  T choice;
+  types::returnstatus status;
+
+  for (size_t i = 0; i < avector.size(); i++) {
+    svector.push_back(to_string(avector[i]));
+  }
+  options = logic::joinString(svector, rofi_options_delimiter);
+  cmd = _caption_based_menu(acaption, options, "", false, "-format \"i\"");
+  status = logic::execCommand(cmd);
+  if (status.code == 0) {
+    choice = avector[atoi(status.output.c_str())];
+  } else {
+    choice = T();
+  }
+
+  return choice;
 }
 
 string App::_task_based_menu(tasks::Task atask, vector<string> add_menu) {
