@@ -36,6 +36,10 @@ Currently, you need to compile the source code yourself and put the executable i
 - [x] Tags and categories for tasks
 - [x] Editing any task field (development has not been stopped)
 - [x] Active/Done tasks statuses (development has not been stopped)
+- [ ] Assotiations
+  - [ ] Associate a task with a running application
+  - [ ] Associate a task with an e-mail address
+  - [ ] Associate a task with url link
 - [ ] integration with cloud services (maybe, maybe)
 - [x] Task priorities
   - [x] Sorting tasks by priority
