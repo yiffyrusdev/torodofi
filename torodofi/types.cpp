@@ -63,7 +63,6 @@ bool date::_validate_and_pass(unsigned short year, unsigned short month,
   } else {
     days_in = _days_in_months[month];
   }
-  printf("--> %d-%d-%d, %d\n", year, month, day, _bissextile);
 
   passed = passed && (month < 13);
   passed = passed && (day <= days_in);
@@ -137,8 +136,6 @@ date date::operator+(unsigned short adays) {
   years = _year;
   months = _month;
   days = _day;
-
-  printf("%d-%d-%d, %d\n", years, months, days, _bissextile);
 
   days += adays;
   days_in = (_bissextile && months == 2) ? _days_in_months[0]

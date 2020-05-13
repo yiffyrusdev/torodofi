@@ -19,7 +19,7 @@ const std::string rofi_options_delimiter = tasks::string_repr_delimiter;
 const std::string menu_back = "< Back";
 const std::string menu_empty = "---";
 
-const std::vector<std::string> any_menu_actions = {menu_back};
+const std::vector<std::string> any_menu_actions = {};
 
 const std::vector<std::string> one_task_actions = {"0 Mark as done", "1 Edit"};
 
@@ -41,7 +41,8 @@ protected:
 
   // Compose cmdline for task-base menus
   std::string _task_based_menu(tasks::Task atask,
-                               std::vector<std::string> add_menu);
+                               std::vector<std::string> add_menu,
+                               bool any_menu = true);
   std::string _caption_based_menu(std::string acaption, std::string add_menu,
                                   std::string aprompt, bool any_menu = true,
                                   std::string custom_rofi_keys = "");

@@ -57,6 +57,7 @@ void App::Start() {
 
       while (showtask) {
         status = _showOneTask(choice_id);
+        showtask = false;
         choice = status.output;
         choice = choice.substr(0, choice.length() - 1); // remove \n symbol
         if (choice == menu_back) {
@@ -110,7 +111,7 @@ types::returnstatus App::_showActiveTasks() {
     }
   }
   cmd = _caption_based_menu(active_tasks_caption, _objTasks.toString(),
-                            "Active", true, kb_customs) +
+                            "Active", false, kb_customs) +
         " ";
   if (high_priorities.size() > 0) {
     cmd += "-u " + logic::joinString(high_priorities, ",") + " ";
@@ -296,7 +297,8 @@ T App::_chooseFromVector(vector<T> avector, string acaption) {
   return choice;
 }
 
-string App::_task_based_menu(tasks::Task atask, vector<string> add_menu) {
+string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
+                             bool any_menu) {
   types::config _config = _objConfig.getConfig();
   string cmd;
   vector<string> caption;
@@ -311,8 +313,10 @@ string App::_task_based_menu(tasks::Task atask, vector<string> add_menu) {
   };
 
   cmd += "echo -e \"";
-  cmd += logic::joinString(any_menu_actions, rofi_options_delimiter) +
-         rofi_options_delimiter;
+  if (any_menu && any_menu_actions.size() > 0) {
+    cmd += logic::joinString(any_menu_actions, rofi_options_delimiter) +
+           rofi_options_delimiter;
+  }
   cmd += logic::joinString(add_menu, rofi_options_delimiter) +
          rofi_options_delimiter;
 
@@ -331,7 +335,7 @@ string App::_caption_based_menu(string acaption, string add_menu,
   string cmd;
 
   cmd = "echo -e \"";
-  if (any_menu) {
+  if (any_menu && any_menu_actions.size() > 0) {
     cmd += logic::joinString(any_menu_actions, rofi_options_delimiter) +
            rofi_options_delimiter;
   }
@@ -348,9 +352,9 @@ void App::_readConfig(string afilename) {
   types::config _config = _objConfig.getConfig();
 
   active_tasks_caption = "Have a nice day!\n";
-  active_tasks_caption += _config.keys.kb_new_task + "to add new task\n";
-  active_tasks_caption += _config.keys.kb_active_done + "to view done tasks\n";
-  active_tasks_caption += _config.keys.kb_task_agenda + "to view agenda";
+  active_tasks_caption += _config.keys.kb_new_task + " to add new task\n";
+  active_tasks_caption += _config.keys.kb_active_done + " to view done tasks\n";
+  active_tasks_caption += _config.keys.kb_task_agenda + " to view agenda";
 
   kb_customs =
       " -kb-custom-1 \"" + _objConfig.getConfig().keys.kb_active_done + "\"";
