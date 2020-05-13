@@ -9,7 +9,7 @@ All tasks are stored in a .md file, and the storage format makes it easy to manu
 
 ## Usage
 
-After installation, you need to create a configuration file: **$HOME/.config  torodofi.conf**.
+After installation, you need to create a configuration file: **$HOME/.config/ torodofi.conf**.
 
 You can take contents from **example.cfg**. In this file, you definitely need to set the path to the task file. It is also necessary to create this file. At least one task must be created inside the file.
 
