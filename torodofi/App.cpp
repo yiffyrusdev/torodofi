@@ -112,8 +112,12 @@ types::returnstatus App::_showActiveTasks() {
   cmd = _caption_based_menu(active_tasks_caption, _objTasks.toString(),
                             "Active", true, kb_customs) +
         " ";
-  cmd += "-u " + logic::joinString(high_priorities, ",") + " ";
-  cmd += "-a " + logic::joinString(medi_priorities, ",") + " ";
+  if (high_priorities.size() > 0) {
+    cmd += "-u " + logic::joinString(high_priorities, ",") + " ";
+  }
+  if (medi_priorities.size() > 0) {
+    cmd += "-a " + logic::joinString(medi_priorities, ",") + " ";
+  }
   status = logic::execCommand(cmd);
 
   return status;
