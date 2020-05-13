@@ -16,7 +16,7 @@ const std::string string_repr_delimiter = "\n";
 
 class TaskContainer {
 protected:
-  std::vector<Task> _tasks, _tasks_active, _tasks_done;
+  std::vector<Task> _tasks_active, _tasks_done;
   std::vector<std::string> _categories, _tags;
   std::string _filename;
 

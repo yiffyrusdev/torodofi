@@ -31,6 +31,7 @@ void App::Start() {
   unsigned new_prioroty;
 
   while (showtasks) {
+    _objTasks.sortByPriority();
     status = _showTasks(showtasks_active);
     switch (status.code) {
     case 3072: // kb-custom-1
@@ -112,7 +113,6 @@ types::returnstatus App::_showTasks(bool is_active) {
   vector<string> medi_priorities;
   unsigned task_priority;
 
-  _objTasks.sortByPriority();
   tasks = _objTasks.getTasks(is_active);
 
   for (size_t t = 0; t < tasks.size(); t++) {
@@ -182,7 +182,7 @@ void App::_editTask(unsigned aid, bool is_active) {
   } else if (choice == edit_task_options[2]) { // 3 Priority
     untmp = _chooseFromVector(tasks::available_priorities, "Choose priority");
     task->setPriority(untmp);
-    _objTasks.sortByPriority();
+    //_objTasks.sortByPriority();
 
   } else if (choice == edit_task_options[3]) { // 4 Tags
     caption =
@@ -208,7 +208,7 @@ void App::_editTask(unsigned aid, bool is_active) {
 
   } else if (choice == edit_task_options[5]) { // 6 Delete
     _objTasks.delTask(task->getId(), is_active);
-    _objTasks.sortByPriority();
+    //_objTasks.sortByPriority();
   }
 }
 

@@ -71,19 +71,11 @@ void TaskContainer::readFile(string afilename) {
     }
     // If read was successfull, then we can store afilename
     _filename = afilename;
-    // Sort read tasks by priority
-    _sort_priority();
-    // Aggregate all tags and categories
-    for (size_t t = 0; t < _tasks.size(); t++) {
-      addTag(_tasks[t].getTags());
-      addCategory(_tasks[t].getCategories());
-    }
-  } // namespace tasks
-  else {
+  } else {
     printf("tasks::TaskContainer: string afilename: %s\n", afilename.c_str());
     throw std::invalid_argument("File could not be opened");
   }
-} // namespace toro
+}
 
 void TaskContainer::addTask(string atext, types::date expire,
                             vector<string> atags, vector<string> acategories,
@@ -93,7 +85,8 @@ void TaskContainer::addTask(string atext, types::date expire,
 }
 
 void TaskContainer::addTask(Task atask) {
-  _tasks.push_back(atask);
+  addTag(atask.getTags());
+  addCategory(atask.getCategories());
   if (atask.getActive()) { // got Active task
     _tasks_active.push_back(atask);
   } else { // got Done task
@@ -164,23 +157,23 @@ string TaskContainer::toString(bool is_active, string delimiter) {
 void TaskContainer::sortByPriority() { _sort_priority(); }
 
 void TaskContainer::refreshActiveDone() {
-  _tasks = _tasks_active;
-  _tasks.insert(_tasks.end(), _tasks_done.begin(), _tasks_done.end());
+  vector<Task> tasks = _tasks_active;
+  tasks.insert(tasks.end(), _tasks_done.begin(), _tasks_done.end());
   _tasks_active.clear();
   _tasks_done.clear();
 
-  for (size_t i = 0; i < _tasks.size(); i++) {
-    if (_tasks[i].getActive()) {
-      _tasks_active.push_back(_tasks[i]);
+  for (size_t i = 0; i < tasks.size(); i++) {
+    if (tasks[i].getActive()) {
+      _tasks_active.push_back(tasks[i]);
     } else {
-      _tasks_done.push_back(_tasks[i]);
+      _tasks_done.push_back(tasks[i]);
     }
   }
 }
 
 // protected
 void TaskContainer::_sort_priority() {
-  vector<Task> *alltasks[3] = {&_tasks_active, &_tasks_done, &_tasks};
+  vector<Task> *alltasks[2] = {&_tasks_active, &_tasks_done};
 
   for (size_t v = 0; v < (sizeof(alltasks) / sizeof(*alltasks)); v++) {
     sort((*alltasks[v]).begin(), (*alltasks[v]).end(), cmp_prioroty);
