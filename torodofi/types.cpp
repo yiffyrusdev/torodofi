@@ -55,13 +55,16 @@ bool date::_validate_and_pass(unsigned short year, unsigned short month,
   unsigned short days_in;
   string yyyy, mm, dd;
 
+  _bissextile = false;
   passed = passed && (year < 4000);
-  if ((year % 4 == 0) && (year % 100 != 0)) { // високосный year
+  if ((year % 4 == 0) && (year % 100 != 0)) { // bissextile year
     days_in = (month == 2) ? _days_in_months[0] : _days_in_months[month];
     _bissextile = true;
   } else {
     days_in = _days_in_months[month];
   }
+  printf("--> %d-%d-%d, %d\n", year, month, day, _bissextile);
+
   passed = passed && (month < 13);
   passed = passed && (day <= days_in);
 
@@ -134,6 +137,8 @@ date date::operator+(unsigned short adays) {
   years = _year;
   months = _month;
   days = _day;
+
+  printf("%d-%d-%d, %d\n", years, months, days, _bissextile);
 
   days += adays;
   days_in = (_bissextile && months == 2) ? _days_in_months[0]

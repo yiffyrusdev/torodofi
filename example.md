@@ -1,5 +1,3 @@
-## 1
-* 2020-05-13 2020-06-15 rofi pet-projects Create yet another rofi-based task manager
 ## 2
 * 2020-05-13 2020-12-28 c++ programming Learn to program in C++
 * 2020-05-13 2020-05-14 git,c++ pet-projects,programming Push that commits to github.com/pushsla/torodofi
