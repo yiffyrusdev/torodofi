@@ -21,12 +21,12 @@ Currently, you need to compile the source code yourself and put the executable i
 - [x] Tags and categories for tasks
 - [x] Editing any task field (development has not been stopped)
 - [x] Active/Done tasks statuses (development has not been stopped)
-- [] integration with cloud services (maybe, maybe)
+- [ ] integration with cloud services (maybe, maybe)
 - [x] Task priorities
   - [x] Sorting tasks by priority
   - [x] Accent colors for 1 and 2 priority tasks
-- [] Deadline based agenda
-- [] Deadline & priority based agenda
+- [ ] Deadline based agenda
+- [ ] Deadline & priority based agenda
 - [x] Select any menu element with configurable hotkey
 - [x] Rofi UI (development has not been stopped)
 - [x] YAML-like Configuration file
