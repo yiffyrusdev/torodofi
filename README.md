@@ -1,5 +1,5 @@
 # Torodofi - powerfull to-do list manager driven with rofi
-![todo + rofi](applepen.webp)
+![todo + rofi](img/applepen.webp)
 
 ## Overview
 
@@ -7,9 +7,24 @@ Torodofi - Torodofi is a simple tool for managing current tasks, scheduling base
 
 All tasks are stored in a .md file, and the storage format makes it easy to manually create and edit a task list.
 
+Active tasks:
+![active tasks](img/active.png)
+
+Done tasks:
+![done tasks](img/done.png)
+
+Edit task:
+![edit task](img/edit.png)
+
+Choose tags for new task (multi selection Shift+Enter):
+![tags choose](img/tags.png)
+
+Set deadline for task (It's impossible to set earlier then creation date):
+![set deadline](img/deadline.png)
+
 ## Usage
 
-After installation, you need to create a configuration file: **$HOME/.config/ torodofi.conf**.
+After installation, you need to create a configuration file: **$HOME/.config/torodofi.conf**.
 
 You can take contents from **example.cfg**. In this file, you definitely need to set the path to the task file. It is also necessary to create this file. At least one task must be created inside the file.
 
