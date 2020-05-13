@@ -72,10 +72,11 @@ struct returnstatus {
 };
 
 // config::Config _config type
-struct keysset {              // hotkeys
-  std::string kb_active_done; // switch between active and done tasks
-  std::string kb_task_agenda; // switch between tasklist and agenda
-  std::string kb_new_task;    // add new task
+struct keysset {                 // hotkeys
+  std::string kb_active_done;    // switch between active and done tasks
+  std::string kb_task_agenda;    // switch between tasklist and agenda
+  std::string kb_new_task;       // add new task
+  std::string kb_index_modofier; // modifier to choose element by index
 };
 struct execset {    // executable commands
   std::string rofi; // rofi GUI command

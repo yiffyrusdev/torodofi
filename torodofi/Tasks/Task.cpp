@@ -23,6 +23,7 @@ Task::Task(string atext, types::date expire, vector<string> atags,
   _task.categories = acategories;
   _task.creation_date = types::date(); // empty constructs today
   _task.priority = apriority;
+  _task.is_active = true;
 }
 
 Task::Task(string atask, unsigned apriority) {
@@ -100,7 +101,7 @@ string Task::toFileString() {
 }
 
 string Task::toString(string delimiter) {
-  string result = to_string(_task.id) + delimiter;
+  string result = to_string(_task.id + 1) + delimiter;
   result += _task.text + delimiter;
   result += _task.expire_date.toString() + delimiter;
   result += logic::joinString(_task.tags, ",") + delimiter;

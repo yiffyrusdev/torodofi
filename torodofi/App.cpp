@@ -17,6 +17,7 @@ void App::Start() {
   string choice;
   unsigned choice_id;
   types::returnstatus status;
+  bool tmp;
 
   bool showtasks = true;
   bool showtasks_active = true;
@@ -55,7 +56,8 @@ void App::Start() {
         showtasks = false;
       } else {
         // Is it an ungly hack after deleting "< Back" option?
-        choice_id = atoi(logic::splitString(choice)[0].c_str());
+        // Look after "-1"!!!!
+        choice_id = atoi(logic::splitString(choice)[0].c_str()) - 1;
         showtask = true;
       }
 
@@ -67,7 +69,10 @@ void App::Start() {
         if (choice == menu_back) {
           showtask = false;
         } else if (choice == one_task_actions[0]) { // 0 Mark as done
-          showtask = true;
+          showtask = false;
+          tmp = _objTasks.getTask(choice_id)->getActive();
+          _objTasks.getTask(choice_id)->setActive(!tmp);
+          showtasks_active = true;
         } else if (choice == one_task_actions[1]) { // 1 Edit
           showtask = false;
           edittask = true;
@@ -94,7 +99,7 @@ void App::_exit() { _objTasks.Dump(); }
 
 types::returnstatus App::_showTasks(bool is_active) {
   vector<tasks::Task> tasks = _objTasks.getTasks();
-  size_t prio_offset = any_menu_actions.size();
+  size_t prio_offset = any_menu_actions.size(); // FIXME
   types::returnstatus status;
   string cmd, prompt;
   vector<string> high_priorities;
@@ -108,7 +113,8 @@ types::returnstatus App::_showTasks(bool is_active) {
     if (tasks[t].getActive()) {
       switch (tasks[t].getPriority()) {
       case 1:
-        high_priorities.push_back(to_string(tasks[t].getId() + prio_offset));
+        high_priorities.push_back(
+            to_string(tasks[t].getId() + prio_offset)); // FIXME WRONG COLORING
         break;
       case 2:
         medi_priorities.push_back(to_string(tasks[t].getId() + prio_offset));
@@ -118,7 +124,7 @@ types::returnstatus App::_showTasks(bool is_active) {
   }
   prompt = (is_active) ? "Active" : "Done";
   cmd = _caption_based_menu(active_tasks_caption, _objTasks.toString(is_active),
-                            prompt, false, kb_customs) +
+                            prompt, false, kb_customs + kb_selections) +
         " ";
   if (high_priorities.size() > 0) {
     cmd += "-u " + logic::joinString(high_priorities, ",") + " ";
@@ -136,7 +142,7 @@ types::returnstatus App::_showOneTask(unsigned aid) {
   types::returnstatus status;
   string cmd;
 
-  cmd = _task_based_menu(tasks[aid], one_task_actions);
+  cmd = _task_based_menu(tasks[aid], one_task_actions, false, kb_selections);
   status = logic::execCommand(cmd);
 
   return status;
@@ -151,25 +157,25 @@ void App::_editTask(unsigned aid) {
   unsigned untmp;
   types::date dtmp;
 
-  cmd = _task_based_menu((*task), edit_task_options);
+  cmd = _task_based_menu((*task), edit_task_options, false, kb_selections);
   status = logic::execCommand(cmd);
 
   choice = status.output;
   choice = choice.substr(0, choice.length() - 1); // remove \n from end line
-  if (choice == edit_task_options[0]) {           // 0 Text
+  if (choice == edit_task_options[0]) {           // 1 Text
     choice = _chooseText(task->getText(), task->getText());
     task->setText(choice);
 
-  } else if (choice == edit_task_options[1]) { // 1 Deadline
+  } else if (choice == edit_task_options[1]) { // 2 Deadline
     dtmp = _chooseDate("Choose new Deadline:\n", task->getExpire());
     task->setExpire(dtmp);
 
-  } else if (choice == edit_task_options[2]) { // Priority
+  } else if (choice == edit_task_options[2]) { // 3 Priority
     untmp = _chooseFromVector(tasks::available_priorities, "Choose priority");
     task->setPriority(untmp);
     _objTasks.sortByPriority();
 
-  } else if (choice == edit_task_options[3]) { // 3 Tags
+  } else if (choice == edit_task_options[3]) { // 4 Tags
     caption =
         "Current: " +
         logic::joinString(task->getTags(), tasks::task_field_inner_delimiter);
@@ -180,7 +186,7 @@ void App::_editTask(unsigned aid) {
       task->setTags(vstmp);
     }
 
-  } else if (choice == edit_task_options[4]) { // 4 Categories
+  } else if (choice == edit_task_options[4]) { // 5 Categories
     caption =
         "Current: " + logic::joinString(task->getCategories(),
                                         tasks::task_field_inner_delimiter);
@@ -191,7 +197,7 @@ void App::_editTask(unsigned aid) {
       task->setCategories(vstmp);
     }
 
-  } else if (choice == edit_task_options[5]) { // 5 Delete
+  } else if (choice == edit_task_options[5]) { // 6 Delete
     _objTasks.delTask(task->getId());
     _objTasks.sortByPriority();
   }
@@ -305,7 +311,7 @@ T App::_chooseFromVector(vector<T> avector, string acaption) {
 }
 
 string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
-                             bool any_menu) {
+                             bool any_menu, string custom_rofi_keys) {
   types::config _config = _objConfig.getConfig();
   string cmd;
   vector<string> caption;
@@ -329,6 +335,7 @@ string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
 
   cmd += "\" | ";
   cmd += _config.exec.rofi + " ";
+  cmd += custom_rofi_keys;
   cmd += "-dmenu -p \"Task\" ";
   cmd += "-mesg \"" + logic::joinString(caption, "\n") + "\"";
 
@@ -369,6 +376,13 @@ void App::_readConfig(string afilename) {
       " -kb-custom-2 \"" + _objConfig.getConfig().keys.kb_new_task + "\"";
   kb_customs +=
       " -kb-custom-3 \"" + _objConfig.getConfig().keys.kb_task_agenda + "\"";
+
+  kb_selections = "";
+  for (size_t k = 1; k < 10; k++) {
+    kb_selections += " -kb-select-" + to_string(k);
+    kb_selections +=
+        " \"" + _config.keys.kb_index_modofier + to_string(k) + "\" ";
+  }
 }
 
 void App::_readTasks(string afilename) { _objTasks.readFile(afilename); }

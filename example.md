@@ -1,5 +1,7 @@
+## 1
+- 2020-05-13 2020-05-22 C# univer,programming Ханойские башни ПЯВУ
+- 2020-05-13 2020-05-14 pe univer Доделать ФИТНЕС-АЭРОБИКА и взть еще один модуль по физре
+- 2020-05-13 2020-05-18 --- univer ArcGis Online по ИСТ
+- 2020-05-13 2020-05-17 --- univer Реферат ИСТ
 ## 2
-- 2020-05-13 2020-12-28 c++ programming Learn to program in C++
-- 2020-05-13 2020-05-14 git,c++ pet-projects,programming Push that commits to github.com/pushsla/torodofi
-## 3
-- 2020-05-13 2020-05-15 food,git animals,programming Buy octocat milk
+- 2020-05-13 2020-06-10 math univer Практиковаться с интегралами

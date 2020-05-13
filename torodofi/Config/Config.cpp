@@ -11,6 +11,7 @@ void Config::_Config() {
   _config.keys.kb_active_done = "Alt+a";
   _config.keys.kb_new_task = "Alt+n";
   _config.keys.kb_task_agenda = "Alt+a";
+  _config.keys.kb_index_modofier = "Alt+";
   _config.path.taskfile = "example.md";
 }
 Config::Config() { _Config(); }
@@ -54,6 +55,8 @@ bool Config::_validate_and_pass_line(string aline) {
       _config.keys.kb_task_agenda = val;
     } else if (var == "kb_new_task") {
       _config.keys.kb_new_task = val;
+    } else if (var == "kb_index_modofier") {
+      _config.keys.kb_index_modofier = val;
     } else if (var == "rofi") {
       _config.exec.rofi = val;
     } else if (var == "taskfile") {

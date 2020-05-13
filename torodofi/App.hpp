@@ -21,17 +21,19 @@ const std::string menu_empty = "---";
 
 const std::vector<std::string> any_menu_actions = {};
 
-const std::vector<std::string> one_task_actions = {"0 Mark as done", "1 Edit"};
+const std::vector<std::string> one_task_actions = {"1 Toggle", "2 Edit"};
 
 const std::vector<std::string> edit_task_options = {
-    "0 Text", "1 Deadline", "2 Priority", "3 Tags", "4 Categories", "5 Delete"};
+    "1 Text", "2 Deadline", "3 Priority", "4 Tags", "5 Categories", "6 Delete"};
 
 class App {
 protected:
   config::Config _objConfig;
   tasks::TaskContainer _objTasks;
   std::string active_tasks_caption;
+
   std::string kb_customs;
+  std::string kb_selections;
 
   void _exit();
   // Read configuration file
@@ -42,7 +44,8 @@ protected:
   // Compose cmdline for task-base menus
   std::string _task_based_menu(tasks::Task atask,
                                std::vector<std::string> add_menu,
-                               bool any_menu = true);
+                               bool any_menu = true,
+                               std::string custom_rofi_keys = "");
   std::string _caption_based_menu(std::string acaption, std::string add_menu,
                                   std::string aprompt, bool any_menu = true,
                                   std::string custom_rofi_keys = "");
