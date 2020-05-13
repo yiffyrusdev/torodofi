@@ -23,20 +23,26 @@ void TaskContainer::Dump(std::string afilename) {
   }
   unsigned priority;
   Task cmptask;
+  vector<vector<Task> *> tasks;
+  vector<string> h1_captions;
   ofstream file(afilename);
 
-  _tasks = _tasks_active;
-  _tasks.insert(_tasks.end(), _tasks_done.begin(), _tasks_done.end());
   _sort_priority();
+  tasks = {&_tasks_active, &_tasks_done};
+  h1_captions = {"# Active Tasks", "# Done Tasks"};
 
   if (file.is_open()) {
-    for (size_t t = 0; t < _tasks.size(); t++) {
-      cmptask = _tasks[t];
-      if (cmptask.getTask().priority != priority) {
-        priority = cmptask.getTask().priority;
-        file << priority_start_point + to_string(priority) << endl;
+    for (size_t v = 0; v < tasks.size(); v++) {
+      file << endl << h1_captions[v];
+      priority = 0;
+      for (size_t t = 0; t < (*tasks[v]).size(); t++) {
+        cmptask = (*tasks[v])[t];
+        if (cmptask.getTask().priority != priority) {
+          priority = cmptask.getTask().priority;
+          file << endl << priority_start_point + to_string(priority) << endl;
+        }
+        file << cmptask.toFileString() << endl;
       }
-      file << cmptask.toFileString() << endl;
     }
   } else {
     printf("tasks::TaskContainer: string afilename: %s\n", afilename.c_str());
@@ -54,11 +60,11 @@ void TaskContainer::readFile(string afilename) {
   if (file.is_open()) {
     // Read file: priorities and tasks
     while (getline(file, line)) {
-      if (line.find(priority_start_point) == 0) {
-        priority = atoi(line.substr(pri_del_len, pri_del_len + 2).c_str());
-      } else {
-        if (line.find(task_start_point_active) >= 0 ||
-            line.find(task_start_point_done) >= 0) {
+      if (line.length() > 1) {
+        if (line.find(priority_start_point) == 0) {
+          priority = atoi(line.substr(pri_del_len, pri_del_len + 2).c_str());
+        } else if ((int)line.find(task_start_point_active) >= 0 ||
+                   (int)line.find(task_start_point_done) >= 0) {
           addTask(Task(line, priority));
         }
       }
@@ -72,11 +78,12 @@ void TaskContainer::readFile(string afilename) {
       addTag(_tasks[t].getTags());
       addCategory(_tasks[t].getCategories());
     }
-  } else {
+  } // namespace tasks
+  else {
     printf("tasks::TaskContainer: string afilename: %s\n", afilename.c_str());
     throw std::invalid_argument("File could not be opened");
   }
-}
+} // namespace toro
 
 void TaskContainer::addTask(string atext, types::date expire,
                             vector<string> atags, vector<string> acategories,

@@ -57,7 +57,7 @@ Task::Task(string ataskline, unsigned apriority) {
 vector<string> Task::_validate_and_pass(string atask) {
   short active_start_pos = atask.find(task_start_point_active);
   short done_start_pos = atask.find(task_start_point_done);
-  short start_pos;
+  short start_pos = -1;
   string start_point, is_active;
   vector<string> parsed_task;
 
