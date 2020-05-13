@@ -6,7 +6,10 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  toro::app::App Application("example.cfg");
+  string homedir;
+
+  homedir = getenv("HOME");
+  toro::app::App Application(homedir + "/.config/torodofi.conf");
 
   Application.Start();
 

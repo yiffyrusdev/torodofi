@@ -26,8 +26,8 @@ Task::Task(string atext, types::date expire, vector<string> atags,
   _task.is_active = true;
 }
 
-Task::Task(string atask, unsigned apriority) {
-  vector<string> parsed_task = _validate_and_pass(atask);
+Task::Task(string ataskline, unsigned apriority) {
+  vector<string> parsed_task = _validate_and_pass(ataskline);
   // task fields
   types::date creation_date;
   types::date expire_date;

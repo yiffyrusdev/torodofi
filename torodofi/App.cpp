@@ -32,7 +32,6 @@ void App::Start() {
 
   while (showtasks) {
     status = _showTasks(showtasks_active);
-    // printf("%d\n", status.code);
     switch (status.code) {
     case 3072: // kb-custom-1
       break;
@@ -51,6 +50,9 @@ void App::Start() {
       break;
     case 0:
       choice = status.output;
+      if (choice.length() <= 1) {
+        continue;
+      }
       choice = choice.substr(0, choice.length() - 1); // remove \n symbol
       if (choice == menu_back) {
         showtasks = false;
@@ -62,7 +64,10 @@ void App::Start() {
       }
 
       while (showtask) {
-        status = _showOneTask(choice_id);
+        status = _showOneTask(choice_id, showtasks_active);
+        if (status.output.length() <= 1) {
+          continue;
+        }
         showtask = false;
         choice = status.output;
         choice = choice.substr(0, choice.length() - 1); // remove \n symbol
@@ -70,8 +75,9 @@ void App::Start() {
           showtask = false;
         } else if (choice == one_task_actions[0]) { // 0 Mark as done
           showtask = false;
-          tmp = _objTasks.getTask(choice_id)->getActive();
-          _objTasks.getTask(choice_id)->setActive(!tmp);
+          tmp = _objTasks.getTask(choice_id, showtasks_active)->getActive();
+          _objTasks.getTask(choice_id, showtasks_active)->setActive(!tmp);
+          _objTasks.refreshActiveDone();
           showtasks_active = true;
         } else if (choice == one_task_actions[1]) { // 1 Edit
           showtask = false;
@@ -80,7 +86,7 @@ void App::Start() {
       }
 
       while (edittask) {
-        _editTask(choice_id);
+        _editTask(choice_id, showtasks_active);
         edittask = false; // thats why if choice == menu_back is unneeded
       }
       break;
@@ -98,8 +104,8 @@ void App::Start() {
 void App::_exit() { _objTasks.Dump(); }
 
 types::returnstatus App::_showTasks(bool is_active) {
-  vector<tasks::Task> tasks = _objTasks.getTasks();
-  size_t prio_offset = any_menu_actions.size(); // FIXME
+  vector<tasks::Task> tasks;
+  size_t prio_offset = 0; // any_menu_actions.size(); // FIXME
   types::returnstatus status;
   string cmd, prompt;
   vector<string> high_priorities;
@@ -107,19 +113,17 @@ types::returnstatus App::_showTasks(bool is_active) {
   unsigned task_priority;
 
   _objTasks.sortByPriority();
-  for (size_t t = 0; t < tasks.size(); t++) {
-    string cmd;
+  tasks = _objTasks.getTasks(is_active);
 
-    if (tasks[t].getActive()) {
-      switch (tasks[t].getPriority()) {
-      case 1:
-        high_priorities.push_back(
-            to_string(tasks[t].getId() + prio_offset)); // FIXME WRONG COLORING
-        break;
-      case 2:
-        medi_priorities.push_back(to_string(tasks[t].getId() + prio_offset));
-        break;
-      }
+  for (size_t t = 0; t < tasks.size(); t++) {
+    switch (tasks[t].getPriority()) {
+    case 1:
+      high_priorities.push_back(
+          to_string(tasks[t].getId() + prio_offset)); // FIXME WRONG COLORING
+      break;
+    case 2:
+      medi_priorities.push_back(to_string(tasks[t].getId() + prio_offset));
+      break;
     }
   }
   prompt = (is_active) ? "Active" : "Done";
@@ -137,10 +141,12 @@ types::returnstatus App::_showTasks(bool is_active) {
   return status;
 }
 
-types::returnstatus App::_showOneTask(unsigned aid) {
-  vector<tasks::Task> tasks = _objTasks.getTasks();
+types::returnstatus App::_showOneTask(unsigned aid, bool is_active) {
+  vector<tasks::Task> tasks;
   types::returnstatus status;
   string cmd;
+
+  tasks = _objTasks.getTasks(is_active);
 
   cmd = _task_based_menu(tasks[aid], one_task_actions, false, kb_selections);
   status = logic::execCommand(cmd);
@@ -148,8 +154,8 @@ types::returnstatus App::_showOneTask(unsigned aid) {
   return status;
 }
 
-void App::_editTask(unsigned aid) {
-  tasks::Task *task = _objTasks.getTask(aid);
+void App::_editTask(unsigned aid, bool is_active) {
+  tasks::Task *task = _objTasks.getTask(aid, is_active);
   types::returnstatus status;
   string cmd;
   string choice, caption, options, prompt;
@@ -161,6 +167,9 @@ void App::_editTask(unsigned aid) {
   status = logic::execCommand(cmd);
 
   choice = status.output;
+  if (choice.length() <= 1) {
+    return;
+  }
   choice = choice.substr(0, choice.length() - 1); // remove \n from end line
   if (choice == edit_task_options[0]) {           // 1 Text
     choice = _chooseText(task->getText(), task->getText());
@@ -198,7 +207,7 @@ void App::_editTask(unsigned aid) {
     }
 
   } else if (choice == edit_task_options[5]) { // 6 Delete
-    _objTasks.delTask(task->getId());
+    _objTasks.delTask(task->getId(), is_active);
     _objTasks.sortByPriority();
   }
 }

@@ -25,6 +25,10 @@ void TaskContainer::Dump(std::string afilename) {
   Task cmptask;
   ofstream file(afilename);
 
+  _tasks = _tasks_active;
+  _tasks.insert(_tasks.end(), _tasks_done.begin(), _tasks_done.end());
+  _sort_priority();
+
   if (file.is_open()) {
     for (size_t t = 0; t < _tasks.size(); t++) {
       cmptask = _tasks[t];
@@ -55,7 +59,7 @@ void TaskContainer::readFile(string afilename) {
       } else {
         if (line.find(task_start_point_active) >= 0 ||
             line.find(task_start_point_done) >= 0) {
-          _tasks.push_back(Task(line, priority));
+          addTask(Task(line, priority));
         }
       }
     }
@@ -78,14 +82,25 @@ void TaskContainer::addTask(string atext, types::date expire,
                             vector<string> atags, vector<string> acategories,
                             unsigned apriority) {
   Task new_task(atext, expire, atags, acategories, apriority);
-  _tasks.push_back(new_task);
+  addTask(new_task);
+}
+
+void TaskContainer::addTask(Task atask) {
+  _tasks.push_back(atask);
+  if (atask.getActive()) { // got Active task
+    _tasks_active.push_back(atask);
+  } else { // got Done task
+    _tasks_done.push_back(atask);
+  }
   _sort_priority();
 }
 
-void TaskContainer::delTask(size_t aid) {
-  for (size_t i = 0; i < _tasks.size(); i++) {
-    if (_tasks[i].getId() == aid) {
-      _tasks.erase(_tasks.begin() + i);
+void TaskContainer::delTask(size_t aid, bool is_active) {
+  vector<Task> *tasks = (is_active) ? &_tasks_active : &_tasks_done;
+
+  for (size_t i = 0; i < (*tasks).size(); i++) {
+    if ((*tasks)[i].getId() == aid) {
+      (*tasks).erase((*tasks).begin() + i);
     }
   }
 }
@@ -123,42 +138,68 @@ void TaskContainer::addTag(vector<string> atags) {
 }
 
 string TaskContainer::toString(bool is_active, string delimiter) {
+  vector<Task> *tasks = (is_active) ? &_tasks_active : &_tasks_done;
   string result;
 
-  for (size_t t = 0; t < _tasks.size() - 1; t++) {
-    if (_tasks[t].getActive() == is_active) {
-      result += _tasks[t].toString() + delimiter;
+  if ((*tasks).size() > 0) {
+    for (size_t t = 0; t < (*tasks).size() - 1; t++) {
+      result += (*tasks)[t].toString() + delimiter;
     }
-  }
-  if (_tasks[_tasks.size() - 1].getActive() == is_active) {
-    result += _tasks[_tasks.size() - 1].toString();
+    result += (*tasks)[(*tasks).size() - 1].toString();
+    result = logic::linuxColumns(result);
+  } else {
+    result = "";
   }
 
-  return logic::linuxColumns(result);
+  return result;
 }
 
 void TaskContainer::sortByPriority() { _sort_priority(); }
 
+void TaskContainer::refreshActiveDone() {
+  _tasks = _tasks_active;
+  _tasks.insert(_tasks.end(), _tasks_done.begin(), _tasks_done.end());
+  _tasks_active.clear();
+  _tasks_done.clear();
+
+  for (size_t i = 0; i < _tasks.size(); i++) {
+    if (_tasks[i].getActive()) {
+      _tasks_active.push_back(_tasks[i]);
+    } else {
+      _tasks_done.push_back(_tasks[i]);
+    }
+  }
+}
+
 // protected
 void TaskContainer::_sort_priority() {
-  sort(_tasks.begin(), _tasks.end(), cmp_prioroty);
-  for (size_t i = 0; i < _tasks.size(); i++) {
-    _tasks[i]._setId(i);
+  vector<Task> *alltasks[3] = {&_tasks_active, &_tasks_done, &_tasks};
+
+  for (size_t v = 0; v < (sizeof(alltasks) / sizeof(*alltasks)); v++) {
+    sort((*alltasks[v]).begin(), (*alltasks[v]).end(), cmp_prioroty);
+    for (size_t i = 0; i < (*alltasks[v]).size(); i++) {
+      (*alltasks[v])[i]._setId(i);
+    }
   }
 }
 
 // getters
-vector<string> TaskContainer::getTags() {
-  for (size_t s = 0; s < _tags.size(); s++) {
-    printf("%s\n", _tags[s].c_str());
-  }
-  return _tags;
-}
+vector<string> TaskContainer::getTags() { return _tags; }
 
 vector<string> TaskContainer::getCategories() { return _categories; }
 
-vector<Task> TaskContainer::getTasks() { return _tasks; }
-Task *TaskContainer::getTask(size_t index) { return &_tasks[index]; }
+vector<Task> TaskContainer::getTasks(bool is_active) {
+  vector<Task> tasks = (is_active) ? _tasks_active : _tasks_done;
+  return tasks;
+}
+
+Task *TaskContainer::getTask(size_t index, bool is_active) {
+  if (is_active) {
+    return &_tasks_active[index];
+  } else {
+    return &_tasks_done[index];
+  }
+}
 
 } // namespace tasks
 } // namespace toro

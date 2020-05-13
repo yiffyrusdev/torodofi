@@ -16,9 +16,8 @@ const std::string string_repr_delimiter = "\n";
 
 class TaskContainer {
 protected:
-  std::vector<Task> _tasks;
-  std::vector<std::string> _categories;
-  std::vector<std::string> _tags;
+  std::vector<Task> _tasks, _tasks_active, _tasks_done;
+  std::vector<std::string> _categories, _tags;
   std::string _filename;
 
   // Sort containered Tasks by priority;
@@ -43,8 +42,9 @@ public:
   void addTask(std::string atext, types::date expire,
                std::vector<std::string> atags,
                std::vector<std::string> acategories, unsigned apriority);
+  void addTask(Task atask);
   // Delete task by id
-  void delTask(size_t aid);
+  void delTask(size_t aid, bool is_active);
   // Add new category
   void addCategory(std::string acat);
   void addCategory(std::vector<std::string> acats);
@@ -58,12 +58,14 @@ public:
 
   // sort tasks by priority
   void sortByPriority();
+  // Refresh _tasks_active and _tasks_done vectors
+  void refreshActiveDone();
 
   // getters
-  std::vector<Task> getTasks();
+  std::vector<Task> getTasks(bool is_active);
   std::vector<std::string> getTags();
   std::vector<std::string> getCategories();
-  Task *getTask(size_t index);
+  Task *getTask(size_t index, bool is_active);
 };
 
 } // namespace tasks

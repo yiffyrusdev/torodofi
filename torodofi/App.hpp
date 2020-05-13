@@ -54,9 +54,9 @@ protected:
   types::returnstatus _showTasks(bool is_active);
   // Show rofi window with one Task information
   // return selected action string
-  types::returnstatus _showOneTask(unsigned aid);
+  types::returnstatus _showOneTask(unsigned aid, bool is_active);
   // Edit selected by id task
-  void _editTask(unsigned aid);
+  void _editTask(unsigned aid, bool is_active);
   // Choose Tags
   std::vector<std::string> _chooseTags(std::string acaption);
   // Choose Categories
