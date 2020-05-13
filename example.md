@@ -1,8 +1,7 @@
 ## 1
-* 2020-05-11 2020-05-20 tag0,tag2 cat0,cat1,cat2 Hello world! First of all tasks!
-* 2020-05-13 2020-06-14 --- cat0,cat1 Continue Application testing task
+* 2020-05-13 2020-06-15 rofi pet-projects Create yet another rofi-based task manager
 ## 2
-* 2020-05-11 2020-05-12 tag0,tag2 cat0,cat2 Hello world! Second!
-* 2020-05-13 2020-05-13 --- --- Hava Nagila Task
+* 2020-05-13 2020-12-28 c++ programming Learn to program in C++
+* 2020-05-13 2020-05-14 git,c++ pet-projects,programming Push that commits to github.com/pushsla/torodofi
 ## 3
-* 2020-05-13 2020-05-17 --- --- Купить молока
+* 2020-05-13 2020-05-15 food,git animals,programming Buy octocat milk

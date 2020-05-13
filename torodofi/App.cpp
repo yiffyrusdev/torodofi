@@ -96,7 +96,7 @@ types::returnstatus App::_showActiveTasks() {
   vector<string> medi_priorities;
   unsigned task_priority;
 
-  // Tasts already sorted by priority!
+  _objTasks.sortByPriority();
   for (size_t t = 0; t < tasks.size(); t++) {
     string cmd;
 

@@ -139,7 +139,7 @@ date date::operator+(unsigned short adays) {
   days_in = (_bissextile && months == 2) ? _days_in_months[0]
                                          : _days_in_months[months];
   months = (days > days_in) ? months + 1 : months;
-  years = (_month > 12) ? years + 1 : years;
+  years = (months > 12) ? years + 1 : years;
 
   days = (days > days_in) ? days - days_in : days;
   months = (months > 12) ? 1 : months;
