@@ -25,7 +25,7 @@ void App::Start() {
   string new_text;
   types::date new_date;
   vector<string> new_tags, new_categories;
-  unsigned new_prioroty = 1;
+  unsigned new_prioroty;
 
   while (showactive) {
     status = _showActiveTasks();
@@ -38,6 +38,8 @@ void App::Start() {
       new_date = _chooseDate("Choose Deadline!");
       new_tags = _chooseTags("Choose tags for task!");
       new_categories = _chooseCategories("Choose categories for task!");
+      new_prioroty = _chooseFromVector(tasks::available_priorities,
+                                       "Choose task priority!");
       _objTasks.addTask(new_text, new_date, new_tags, new_categories,
                         new_prioroty);
       break;
