@@ -7,3 +7,5 @@ set(SOURCE_ALL torodofi/App.cpp torodofi/types.cpp torodofi/logic.cpp torodofi/C
 
 add_executable(torodofi ${SOURCE_MAIN} ${SOURCE_ALL})
 include_directories(torodofi PRIVATE torodofi)
+
+install(TARGETS torodofi)
