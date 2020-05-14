@@ -170,25 +170,25 @@ date date::operator-(unsigned short adays) {
   return date(years, months, days);
 }
 
-bool date::operator==(date &other) {
-  bool eq = _year == other.getYear();
-  eq = eq && _month == other.getMonth();
-  eq = eq && _day == other.getDay();
+bool date::operator==(const date &two) {
+  bool eq = this->_year == two._year;
+  eq = eq && this->_month == two._month;
+  eq = eq && this->_day == two._day;
   return eq;
 }
 
-bool date::operator>(date &other) {
+bool date::operator>(const date &two) {
   bool isgreater = false;
 
-  if (_year > other.getYear()) {
+  if (this->_year > two._year) {
     isgreater = true;
   } else {
-    if (_year == other.getYear()) {
-      if (_month > other.getMonth()) {
+    if (this->_year == two._year) {
+      if (this->_month > two._month) {
         isgreater = true;
       } else {
-        if (_month == other.getMonth()) {
-          if (_day > other.getDay()) {
+        if (this->_month == two._month) {
+          if (this->_day > two._day) {
             isgreater = true;
           }
         }
@@ -199,16 +199,16 @@ bool date::operator>(date &other) {
   return isgreater;
 }
 
-bool date::operator!=(date &other) { return !((*this) == other); }
+bool date::operator!=(const date &two) { return !(*this == two); }
 
-bool date::operator<(date &other) {
-  return ((*this) != other) && !((*this) > other);
+bool date::operator<(const date &two) {
+  return (*this != two) && !(*this > two);
 }
-bool date::operator>=(date &other) {
-  return ((*this) > other) || ((*this) == other);
+bool date::operator>=(const date &two) {
+  return (*this > two) || (*this > two);
 }
-bool date::operator<=(date &other) {
-  return ((*this) < other) || ((*this) == other);
+bool date::operator<=(const date &two) {
+  return (*this < two) || (*this == two);
 }
 
 date &date::operator=(string gnudate) {

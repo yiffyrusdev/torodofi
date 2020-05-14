@@ -55,14 +55,14 @@ public:
   date operator+(unsigned short adays);
   // do NOT add more than 14 days
   date operator-(unsigned short adays);
-  bool operator==(date &other);
-  bool operator>(date &other);
-  bool operator<(date &other);
-  bool operator>=(date &other);
-  bool operator<=(date &other);
-  bool operator!=(date &other);
-
   date &operator=(std::string gnudate);
+
+  bool operator==(const date &two);
+  bool operator>(const date &two);
+  bool operator<(const date &two);
+  bool operator>=(const date &two);
+  bool operator<=(const date &two);
+  bool operator!=(const date &two);
 };
 
 // return code & stdoutput type
