@@ -30,7 +30,12 @@ You can take contents from **example.cfg**. In this file, you definitely need to
 
 ## Installation
 
-Currently, you need to compile the source code yourself and put the executable in PATH.
+Run
+```bash
+cmake .
+cmake --build .
+```
+Then put torodofi executable to PATH.
 
 ## Features
 - [x] Tags and categories for tasks
