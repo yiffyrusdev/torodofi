@@ -137,21 +137,24 @@ void TaskContainer::addTag(vector<string> atags) {
   }
 }
 
-string TaskContainer::toString(bool is_active, string delimiter) {
+vector<string> TaskContainer::toString(bool is_active, string delimiter) {
   vector<Task> *tasks = (is_active) ? &_tasks_active : &_tasks_done;
+  vector<string> vsresult = {"ID\tTask\tDeadline\tTags\tCategories"};
   string result;
 
   if ((*tasks).size() > 0) {
-    for (size_t t = 0; t < (*tasks).size() - 1; t++) {
-      result += (*tasks)[t].toString() + delimiter;
+    for (size_t t = 0; t < (*tasks).size(); t++) {
+      vsresult.push_back((*tasks)[t].toString());
     }
-    result += (*tasks)[(*tasks).size() - 1].toString();
+    result = logic::joinString(vsresult, delimiter);
     result = logic::linuxColumns(result);
+    vsresult = {logic::splitString(result, delimiter)[0]};
+    vsresult.push_back(result.substr(result.find(delimiter) + 1));
   } else {
-    result = "";
+    vsresult = {"", ""};
   }
 
-  return result;
+  return vsresult;
 }
 
 void TaskContainer::sortByPriority() { _sort_priority(); }

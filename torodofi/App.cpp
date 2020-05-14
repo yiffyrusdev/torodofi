@@ -66,6 +66,10 @@ void App::Start() {
 
       while (showtask) {
         status = _showOneTask(choice_id, showtasks_active);
+        if (status.code == 256) {
+          showtask = false;
+          continue;
+        }
         if (status.output.length() <= 1) {
           continue;
         }
@@ -88,7 +92,7 @@ void App::Start() {
 
       while (edittask) {
         _editTask(choice_id, showtasks_active);
-        edittask = false; // thats why if choice == menu_back is unneeded
+        edittask = false;
       }
       break;
     default:
@@ -108,9 +112,8 @@ types::returnstatus App::_showTasks(bool is_active) {
   vector<tasks::Task> tasks;
   size_t prio_offset = 0; // any_menu_actions.size(); // FIXME
   types::returnstatus status;
-  string cmd, prompt;
-  vector<string> high_priorities;
-  vector<string> medi_priorities;
+  string cmd, prompt, caption;
+  vector<string> high_priorities, medi_priorities, vstmp;
   unsigned task_priority;
 
   tasks = _objTasks.getTasks(is_active);
@@ -127,8 +130,10 @@ types::returnstatus App::_showTasks(bool is_active) {
     }
   }
   prompt = (is_active) ? "Active" : "Done";
-  cmd = _caption_based_menu(active_tasks_caption, _objTasks.toString(is_active),
-                            prompt, false, kb_customs + kb_selections) +
+  vstmp = _objTasks.toString(is_active);
+  caption = active_tasks_caption + "\n" + color2 + vstmp[0] + span;
+  cmd = _caption_based_menu(caption, vstmp[1], prompt, false,
+                            kb_customs + kb_selections) +
         " ";
   if (high_priorities.size() > 0) {
     cmd += "-u " + logic::joinString(high_priorities, ",") + " ";
@@ -326,8 +331,8 @@ string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
   vector<string> caption;
 
   caption = {
-      atask.getText() + " " + atask.getCreation().toString(),
-      "Deadline: " + atask.getExpire().toString(),
+      atask.getText() + " " + color3 + atask.getCreation().toString() + span,
+      "Deadline: " + color1 + atask.getExpire().toString() + span,
       "Tags: " +
           logic::joinString(atask.getTags(), tasks::task_field_inner_delimiter),
       "Categories: " + logic::joinString(atask.getCategories(),
@@ -375,9 +380,15 @@ void App::_readConfig(string afilename) {
   types::config _config = _objConfig.getConfig();
 
   active_tasks_caption = "Have a nice day!\n";
-  active_tasks_caption += _config.keys.kb_new_task + " to add new task\n";
-  active_tasks_caption += _config.keys.kb_active_done + " to view done tasks\n";
-  active_tasks_caption += _config.keys.kb_task_agenda + " to view agenda";
+  active_tasks_caption +=
+      color0 + _config.keys.kb_new_task + span + " to add new task. ";
+  active_tasks_caption +=
+      color0 + _config.keys.kb_active_done + span + " to view done tasks. ";
+  active_tasks_caption +=
+      color0 + _config.keys.kb_task_agenda + span + " to view agenda. ";
+  active_tasks_caption += color0 + _config.keys.kb_index_modofier + "'ID'" +
+                          span + " to select item 1-9 with hotkey. ";
+  active_tasks_caption += color0 + "Esc" + span + " to return back.\n";
 
   kb_customs =
       " -kb-custom-1 \"" + _objConfig.getConfig().keys.kb_active_done + "\"";

@@ -11,11 +11,15 @@
 namespace toro {
 namespace app {
 
+const std::string color0 = "<span color='#2f66dd'>"; // hotkeys
+const std::string color1 = "<span color='#ff9a9a'>"; // deadline
+const std::string color2 = "<span color='#ffffff'>"; // white
+const std::string color3 = "<span color='#a8a8a8'>"; // grey
+const std::string span = "</span>";
+
 const std::string msg0 = "\nChoose the necessary options from the listed "
                          "below:\nShift+Enter for multiple selection\n";
-
 const std::string rofi_options_delimiter = tasks::string_repr_delimiter;
-
 const std::string menu_back = "< Back";
 const std::string menu_empty = "---";
 

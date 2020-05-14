@@ -53,8 +53,9 @@ public:
   void addTag(std::vector<std::string> atags);
   // Repr task container as formatted string with delimiter
   // Return choosen active/done list.
-  std::string toString(bool is_active,
-                       std::string delimiter = string_repr_delimiter);
+  // Return vector {fields caption, fields}
+  std::vector<std::string>
+  toString(bool is_active, std::string delimiter = string_repr_delimiter);
 
   // sort tasks by priority
   void sortByPriority();
