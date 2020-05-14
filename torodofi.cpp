@@ -8,8 +8,7 @@ using namespace std;
 int main(int argc, char *argv[]) {
   string homedir;
 
-  homedir = getenv("HOME");
-  toro::app::App Application(homedir + "/.config/torodofi.conf");
+  toro::app::App Application("");
 
   Application.Start();
 

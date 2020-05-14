@@ -7,11 +7,11 @@ namespace config {
 
 // Config
 void Config::_Config() {
-  _config.exec.rofi = "rofi";
-  _config.keys.kb_active_done = "Alt+a";
+  _config.exec.rofi = "rofi  -tokenize -i -lines 30 -width 1500";
+  _config.keys.kb_active_done = "Alt+Tab";
   _config.keys.kb_new_task = "Alt+n";
   _config.keys.kb_task_agenda = "Alt+a";
-  _config.keys.kb_index_modofier = "Alt+";
+  _config.keys.kb_index_modofier = "";
   _config.path.taskfile = "example.md";
 }
 Config::Config() { _Config(); }

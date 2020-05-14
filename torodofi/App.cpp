@@ -7,6 +7,10 @@ namespace app {
 
 // class App
 App::App(string aconfigfilename) {
+  ifstream file(aconfigfilename.c_str());
+  aconfigfilename = (file.good()) ? aconfigfilename : config_file_name;
+  file.close();
+
   _readConfig(aconfigfilename);
   _readTasks(_objConfig.getConfig().path.taskfile);
 }
@@ -376,6 +380,14 @@ string App::_caption_based_menu(string acaption, string add_menu,
 }
 
 void App::_readConfig(string afilename) {
+  ifstream file(afilename);
+  if (!file.good()) {
+    file.close();
+    ofstream file(afilename);
+    file << endl;
+    file.close();
+  }
+
   _objConfig.readFile(afilename);
   types::config _config = _objConfig.getConfig();
 
@@ -405,7 +417,16 @@ void App::_readConfig(string afilename) {
   }
 }
 
-void App::_readTasks(string afilename) { _objTasks.readFile(afilename); }
+void App::_readTasks(string afilename) {
+  ifstream file(afilename);
+  if (!file.good()) {
+    file.close();
+    ofstream file(afilename);
+    file << endl;
+    file.close();
+  }
+  _objTasks.readFile(afilename);
+}
 
 } // namespace app
 } // namespace toro

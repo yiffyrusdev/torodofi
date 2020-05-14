@@ -11,6 +11,9 @@
 namespace toro {
 namespace app {
 
+const std::string home_directory = getenv("HOME");
+const std::string config_file_name = home_directory + "/.config/torodofi.conf";
+
 const std::string color0 = "<span color='#2f66dd'>"; // hotkeys
 const std::string color1 = "<span color='#ff9a9a'>"; // deadline
 const std::string color2 = "<span color='#ffffff'>"; // white
@@ -77,7 +80,7 @@ protected:
 
 public:
   // Constructor
-  App(std::string aconfigfilename);
+  App(std::string aconfigfilename = "");
   // Start Application
   void Start();
 };
