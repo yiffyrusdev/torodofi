@@ -386,6 +386,11 @@ void App::_readConfig(string afilename) {
     ofstream file(afilename);
     file << endl;
     file.close();
+    string cmd = _objConfig.getConfig().exec.rofi + " -e \"";
+    cmd += " No config file with was found. Empty file was created: ";
+    cmd += config_file_name + "\n ";
+    cmd += "Press Enter to continue\"\n";
+    logic::execCommand(cmd);
   }
 
   _objConfig.readFile(afilename);
@@ -424,6 +429,12 @@ void App::_readTasks(string afilename) {
     ofstream file(afilename);
     file << endl;
     file.close();
+    string cmd = _objConfig.getConfig().exec.rofi + " -e \"";
+    cmd += " No MarkDown file with tasks was found. Empty file was created: ";
+    cmd += home_directory + "/example.md\n ";
+    cmd += "Press Enter to continue\"\n";
+    printf("%s\n", cmd.c_str());
+    logic::execCommand(cmd);
   }
   _objTasks.readFile(afilename);
 }
