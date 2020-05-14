@@ -9,7 +9,7 @@
 
 namespace toro {
 namespace config {
-
+const std::string home_directory = getenv("HOME");
 const std::string var_delimiter = ": ";
 
 class Config {

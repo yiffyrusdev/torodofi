@@ -24,9 +24,9 @@ Set deadline for task (It's impossible to set earlier then creation date):
 
 ## Usage
 
-After installation, you need to create a configuration file: **$HOME/.config/torodofi.conf**.
+After installation and first run, you will find a configuration file: **$HOME/.config/torodofi.conf** and an example.md in your $HOME dir.
 
-You can take contents from **example.cfg**. In this file, you definitely need to set the path to the task file. It is also necessary to create this file. At least one task must be created inside the file.
+You can take contents and config examples from **example.cfg**. In this file, you definitely need to set the path to the task file. It is also necessary to create this file. At least one task must be created inside the file.
 
 ## Installation
 
