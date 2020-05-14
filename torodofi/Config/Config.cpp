@@ -15,23 +15,21 @@ void Config::_Config() {
   _config.keys.kb_index_modofier = "";
   _config.path.taskfile = home_directory + "/example.md";
 }
-Config::Config() { _Config(); }
-Config::Config(string afilename) {
+Config::Config() : _config{}, _filename{} { _Config(); }
+Config::Config(string afilename) : _config{}, _filename{} {
   _Config();
   readFile(afilename);
 }
 
 // Config public
 void Config::readFile(string afilename) {
-  size_t var_del_len = var_delimiter.length();
   string line;
-  bool passed;
   ifstream file(afilename);
 
   if (file.is_open()) {
     while (getline(file, line)) {
-      if (line.find(var_delimiter) > 0) {
-        passed = _validate_and_pass_line(line);
+      if (line.find(var_delimiter) != string::npos) {
+        _validate_and_pass_line(line);
       }
     }
   } else {
@@ -43,8 +41,8 @@ void Config::readFile(string afilename) {
 types::config Config::getConfig() { return _config; }
 
 // Config protected
-bool Config::_validate_and_pass_line(string aline) {
-  vector<string> parsed_line = logic::splitString(aline, var_delimiter);
+void Config::_validate_and_pass_line(string aline) {
+  vector<string> parsed_line{logic::splitString(aline, var_delimiter)};
   string var, val;
 
   if (parsed_line.size() == 2) {
@@ -63,9 +61,6 @@ bool Config::_validate_and_pass_line(string aline) {
     } else if (var == "taskfile") {
       _config.path.taskfile = val;
     }
-    return true;
-  } else {
-    return false;
   }
 }
 

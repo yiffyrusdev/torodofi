@@ -6,8 +6,11 @@ namespace toro {
 namespace app {
 
 // class App
-App::App(string aconfigfilename) {
+App::App(string aconfigfilename)
+    : _objConfig(),
+      _objTasks(), active_tasks_caption{}, kb_customs{}, kb_selections{} {
   ifstream file(aconfigfilename.c_str());
+
   aconfigfilename = (file.good()) ? aconfigfilename : config_file_name;
   file.close();
 
@@ -20,14 +23,14 @@ App::App(string aconfigfilename) {
 void App::Start() {
   string choice;
   unsigned choice_id;
-  types::returnstatus status;
+  types::returnstatus status{};
   bool tmp;
 
-  bool showtasks = true;
-  bool showtasks_active = true;
+  bool showtasks{true};
+  bool showtasks_active{true};
 
-  bool showtask = false;
-  bool edittask = false;
+  bool showtask{false};
+  bool edittask{false};
 
   string new_text;
   types::date new_date;
@@ -114,11 +117,10 @@ void App::_exit() { _objTasks.Dump(); }
 
 types::returnstatus App::_showTasks(bool is_active) {
   vector<tasks::Task> tasks;
-  size_t prio_offset = 0; // any_menu_actions.size(); // FIXME
-  types::returnstatus status;
+  size_t prio_offset{0}; // any_menu_actions.size(); // FIXME
+  types::returnstatus status{};
   string cmd, prompt, caption;
   vector<string> high_priorities, medi_priorities, vstmp;
-  unsigned task_priority;
 
   tasks = _objTasks.getTasks(is_active);
 
@@ -152,7 +154,7 @@ types::returnstatus App::_showTasks(bool is_active) {
 
 types::returnstatus App::_showOneTask(unsigned aid, bool is_active) {
   vector<tasks::Task> tasks;
-  types::returnstatus status;
+  types::returnstatus status{};
   string cmd;
 
   tasks = _objTasks.getTasks(is_active);
@@ -164,8 +166,8 @@ types::returnstatus App::_showOneTask(unsigned aid, bool is_active) {
 }
 
 void App::_editTask(unsigned aid, bool is_active) {
-  tasks::Task *task = _objTasks.getTask(aid, is_active);
-  types::returnstatus status;
+  tasks::Task *task{_objTasks.getTask(aid, is_active)};
+  types::returnstatus status{};
   string cmd;
   string choice, caption, options, prompt;
   vector<string> vstmp;
@@ -223,7 +225,7 @@ void App::_editTask(unsigned aid, bool is_active) {
 
 string App::_chooseText(string acaption, string atext) {
   string cmd, choice;
-  types::returnstatus status;
+  types::returnstatus status{};
 
   cmd = _caption_based_menu(acaption, atext, "", false);
   cmd += " -filter \"" + atext + "\"";
@@ -239,10 +241,10 @@ string App::_chooseText(string acaption, string atext) {
 }
 
 types::date App::_chooseDate(std::string acaption, types::date adate) {
-  vector<types::date> possible_d = adate.vectorAfter(730);
+  vector<types::date> possible_d{adate.vectorAfter(730)};
   vector<string> possible_s;
   string options, cmd, choice;
-  types::returnstatus status;
+  types::returnstatus status{};
   types::date date_choice;
 
   for (size_t d = 0; d < possible_d.size(); d++) {
@@ -264,7 +266,7 @@ types::date App::_chooseDate(std::string acaption, types::date adate) {
 
 vector<string> App::_chooseTags(string acaption) {
   string options, cmd, choice;
-  types::returnstatus status;
+  types::returnstatus status{};
   vector<string> tags;
 
   options = logic::joinString(_objTasks.getTags(), rofi_options_delimiter);
@@ -286,7 +288,7 @@ vector<string> App::_chooseTags(string acaption) {
 vector<string> App::_chooseCategories(string acaption) {
   string options, cmd, choice;
   vector<string> categories;
-  types::returnstatus status;
+  types::returnstatus status{};
 
   options =
       logic::joinString(_objTasks.getCategories(), rofi_options_delimiter);
@@ -311,7 +313,7 @@ T App::_chooseFromVector(vector<T> avector, string acaption) {
   string options, cmd;
   vector<string> svector;
   T choice;
-  types::returnstatus status;
+  types::returnstatus status{};
 
   for (size_t i = 0; i < avector.size(); i++) {
     svector.push_back(to_string(avector[i]));
@@ -330,7 +332,7 @@ T App::_chooseFromVector(vector<T> avector, string acaption) {
 
 string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
                              bool any_menu, string custom_rofi_keys) {
-  types::config _config = _objConfig.getConfig();
+  types::config _config{_objConfig.getConfig()};
   string cmd;
   vector<string> caption;
 
@@ -363,7 +365,7 @@ string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
 string App::_caption_based_menu(string acaption, string add_menu,
                                 string aprompt, bool any_menu,
                                 string custom_rofi_keys) {
-  types::config _config = _objConfig.getConfig();
+  types::config _config{_objConfig.getConfig()};
   string cmd;
 
   cmd = "echo -e \"";
@@ -433,7 +435,6 @@ void App::_readTasks(string afilename) {
     cmd += " No MarkDown file with tasks was found. Empty file was created: ";
     cmd += home_directory + "/example.md\n ";
     cmd += "Press Enter to continue\"\n";
-    printf("%s\n", cmd.c_str());
     logic::execCommand(cmd);
   }
   _objTasks.readFile(afilename);

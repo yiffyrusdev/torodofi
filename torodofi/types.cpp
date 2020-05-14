@@ -8,16 +8,21 @@ namespace types {
 
 // class date
 
-date::date() {
-  date today = this->today();
+date::date() : _gnudate{}, _year{}, _month{}, _day{}, _bissextile{false} {
+  date today{this->today()};
+
   _validate_and_pass(today.getYear(), today.getMonth(), today.getDay());
 }
 
-date::date(string yyyymmdd) { _real_constructor(yyyymmdd); }
+date::date(string yyyymmdd)
+    : _gnudate{}, _year{}, _month{}, _day{}, _bissextile{false} {
+  _real_constructor(yyyymmdd);
+}
 
-date::date(unsigned year, unsigned month, unsigned day) {
+date::date(unsigned year, unsigned month, unsigned day)
+    : _gnudate{}, _year{}, _month{}, _day{}, _bissextile{false} {
   bool passed;
-  vector<string> parsed = {to_string(year), to_string(month), to_string(day)};
+  vector<string> parsed{to_string(year), to_string(month), to_string(day)};
 
   passed = _validate_and_pass(year, month, day);
   if (!passed) {
@@ -51,11 +56,10 @@ void date::_real_constructor(string yyyymmdd) {
 
 bool date::_validate_and_pass(unsigned short year, unsigned short month,
                               unsigned short day) {
-  bool passed = true;
+  bool passed{true};
   unsigned short days_in;
   string yyyy, mm, dd;
 
-  _bissextile = false;
   passed = passed && (year < 4000);
   if ((year % 4 == 0) && (year % 100 != 0)) { // bissextile year
     days_in = (month == 2) ? _days_in_months[0] : _days_in_months[month];
@@ -88,7 +92,7 @@ bool date::_validate_and_pass(unsigned short year, unsigned short month,
 }
 
 vector<date> date::vectorBefore(size_t acount) {
-  vector<date> dates = {*this};
+  vector<date> dates{*this};
 
   for (; acount > 0; acount--) {
     dates.push_back(dates[dates.size() - 1] - 1);
@@ -98,7 +102,7 @@ vector<date> date::vectorBefore(size_t acount) {
 }
 
 vector<date> date::vectorAfter(size_t acount) {
-  vector<date> dates = {*this};
+  vector<date> dates{*this};
 
   for (size_t d = 0; d < acount; d++) {
     dates.push_back(dates[dates.size() - 1] + 1);
@@ -178,7 +182,7 @@ bool date::operator==(const date &two) {
 }
 
 bool date::operator>(const date &two) {
-  bool isgreater = false;
+  bool isgreater{false};
 
   if (this->_year > two._year) {
     isgreater = true;

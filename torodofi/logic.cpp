@@ -10,7 +10,7 @@ vector<string> splitString(string astring, string delimiter) {
   size_t pos;
 
   if (astring.length() > 0) {
-    if (astring.find(delimiter) >= 0) {
+    if (astring.find(delimiter) != string::npos) {
       while ((pos = astring.find(delimiter)) != string::npos) {
         result.push_back(astring.substr(0, pos));
         astring.erase(0, pos + delimiter.length());
@@ -48,7 +48,7 @@ string linuxColumns(string astring, string delimiter) {
 
 types::returnstatus execCommand(string acommand) {
   char buffer[128];
-  types::returnstatus result;
+  types::returnstatus result{};
 
   // Open pipe to file
   FILE *pipe = popen(acommand.c_str(), "r");

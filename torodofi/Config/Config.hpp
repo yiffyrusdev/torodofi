@@ -21,7 +21,7 @@ protected:
   void _Config();
 
   // Check if line is a valid config line and set specified values
-  bool _validate_and_pass_line(std::string aline);
+  void _validate_and_pass_line(std::string aline);
 
 public:
   // Constructor

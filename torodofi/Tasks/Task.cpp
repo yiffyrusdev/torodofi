@@ -8,7 +8,7 @@ namespace tasks {
 // functions
 
 bool cmp_prioroty(Task &a, Task &b) {
-  bool alessb = false;
+  bool alessb{false};
   if (a.getPriority() == b.getPriority()) {
     alessb = a.getExpire() < b.getExpire();
   } else {
@@ -19,11 +19,10 @@ bool cmp_prioroty(Task &a, Task &b) {
 }
 
 // class Task
-
-Task::Task() {}
-
+Task::Task() : _task{} {}
 Task::Task(string atext, types::date expire, vector<string> atags,
-           vector<string> acategories, unsigned apriority) {
+           vector<string> acategories, unsigned apriority)
+    : _task{} {
   _task.text = atext;
   _task.expire_date = expire;
   _task.tags = atags;
@@ -33,8 +32,8 @@ Task::Task(string atext, types::date expire, vector<string> atags,
   _task.is_active = true;
 }
 
-Task::Task(string ataskline, unsigned apriority) {
-  vector<string> parsed_task = _validate_and_pass(ataskline);
+Task::Task(string ataskline, unsigned apriority) : _task{} {
+  vector<string> parsed_task{_validate_and_pass(ataskline)};
   // task fields
   types::date creation_date;
   types::date expire_date;
@@ -62,23 +61,23 @@ Task::Task(string ataskline, unsigned apriority) {
 }
 
 vector<string> Task::_validate_and_pass(string atask) {
-  short active_start_pos = atask.find(task_start_point_active);
-  short done_start_pos = atask.find(task_start_point_done);
-  short start_pos = -1;
+  size_t active_start_pos{atask.find(task_start_point_active)};
+  size_t done_start_pos{atask.find(task_start_point_done)};
+  size_t start_pos{string::npos};
   string start_point, is_active;
   vector<string> parsed_task;
 
-  if (active_start_pos >= 0) {
+  if (active_start_pos != string::npos) {
     start_pos = active_start_pos;
     start_point = task_start_point_active;
     is_active = "1";
-  } else if (done_start_pos >= 0) {
+  } else if (done_start_pos != string::npos) {
     start_pos = done_start_pos;
     start_point = task_start_point_done;
     is_active = "0";
   }
 
-  if (start_pos >= 0) {
+  if (start_pos != string::npos) {
     start_pos += start_point.length();
     parsed_task = logic::splitString(atask.substr(start_pos));
     parsed_task.push_back(is_active);
@@ -96,7 +95,7 @@ vector<string> Task::_validate_and_pass(string atask) {
 
 string Task::toFileString() {
   string start_point;
-  vector<string> vectorized = {
+  vector<string> vectorized{
       _task.creation_date.c_str(), _task.expire_date.c_str(),
       logic::joinString(_task.tags, task_field_inner_delimiter),
       logic::joinString(_task.categories, task_field_inner_delimiter),

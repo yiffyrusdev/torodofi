@@ -6,14 +6,13 @@ namespace toro {
 namespace tasks {
 
 // class TaskContainer
-TaskContainer::TaskContainer() {
-  _tags = {no_tag};
-  _categories = {no_category};
-}
-TaskContainer::TaskContainer(string afilename) {
-  _tags = {no_tag};
-  _categories = {no_category};
+TaskContainer::TaskContainer()
+    : _tasks_active{}, _tasks_done{},
+      _categories{no_category}, _tags{no_tag}, _filename{} {}
 
+TaskContainer::TaskContainer(string afilename)
+    : _tasks_active{}, _tasks_done{},
+      _categories{no_category}, _tags{no_tag}, _filename{} {
   readFile(afilename);
 }
 
@@ -51,7 +50,7 @@ void TaskContainer::Dump(std::string afilename) {
 }
 
 void TaskContainer::readFile(string afilename) {
-  size_t pri_del_len = priority_start_point.length();
+  size_t pri_del_len{priority_start_point.length()};
   string line;
   unsigned priority;
   vector<string> tmp;
@@ -63,8 +62,8 @@ void TaskContainer::readFile(string afilename) {
       if (line.length() > 1) {
         if (line.find(priority_start_point) == 0) {
           priority = atoi(line.substr(pri_del_len, pri_del_len + 2).c_str());
-        } else if ((int)line.find(task_start_point_active) >= 0 ||
-                   (int)line.find(task_start_point_done) >= 0) {
+        } else if (line.find(task_start_point_active) != string::npos ||
+                   line.find(task_start_point_done) != string::npos) {
           addTask(Task(line, priority));
         }
       }
@@ -138,8 +137,8 @@ void TaskContainer::addTag(vector<string> atags) {
 }
 
 vector<string> TaskContainer::toString(bool is_active, string delimiter) {
+  vector<string> vsresult{"ID\tTask\tDeadline\tTags\tCategories"};
   vector<Task> *tasks = (is_active) ? &_tasks_active : &_tasks_done;
-  vector<string> vsresult = {"ID\tTask\tDeadline\tTags\tCategories"};
   string result;
 
   if ((*tasks).size() > 0) {
@@ -160,7 +159,8 @@ vector<string> TaskContainer::toString(bool is_active, string delimiter) {
 void TaskContainer::sortByPriority() { _sort_priority(); }
 
 void TaskContainer::refreshActiveDone() {
-  vector<Task> tasks = _tasks_active;
+  vector<Task> tasks{_tasks_active};
+
   tasks.insert(tasks.end(), _tasks_done.begin(), _tasks_done.end());
   _tasks_active.clear();
   _tasks_done.clear();
@@ -176,7 +176,7 @@ void TaskContainer::refreshActiveDone() {
 
 // protected
 void TaskContainer::_sort_priority() {
-  vector<Task> *alltasks[2] = {&_tasks_active, &_tasks_done};
+  vector<Task> *alltasks[2]{&_tasks_active, &_tasks_done};
 
   for (size_t v = 0; v < (sizeof(alltasks) / sizeof(*alltasks)); v++) {
     sort((*alltasks[v]).begin(), (*alltasks[v]).end(), cmp_prioroty);
