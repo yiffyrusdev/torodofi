@@ -8,7 +8,14 @@ namespace tasks {
 // functions
 
 bool cmp_prioroty(Task &a, Task &b) {
-  return a.getTask().priority < b.getTask().priority;
+  bool alessb = false;
+  if (a.getPriority() == b.getPriority()) {
+    alessb = a.getExpire() < b.getExpire();
+  } else {
+    alessb = a.getPriority() < b.getPriority();
+  }
+
+  return alessb;
 }
 
 // class Task
