@@ -37,6 +37,8 @@ cmake --build .
 ```
 Then put torodofi executable to PATH.
 
+> Arch Linux users! There is a package in the AUR =)
+
 ## Features
 - [x] Tags and categories for tasks
 - [x] Editing any task field (development has not been stopped)
