@@ -40,7 +40,8 @@ string joinString(vector<string> avector, string delimiter) {
 }
 
 string linuxColumns(string astring, string delimiter) {
-  string cmd = "echo -e \"" + astring + "\" ";
+  string cmd;
+  cmd = "echo -e \"" + astring + "\" ";
   cmd += "| column -s $'" + delimiter + "' -t";
   types::returnstatus status = execCommand(cmd);
   return status.output;

@@ -35,21 +35,16 @@ Task::Task(string atext, types::date expire, vector<string> atags,
 Task::Task(string ataskline, unsigned apriority) : _task{} {
   vector<string> parsed_task{_validate_and_pass(ataskline)};
   // task fields
-  types::date creation_date;
-  types::date expire_date;
-  vector<string> tags;
-  vector<string> categories;
-  string text;
-  bool is_active;
-  vector<string> vector_text;
-
-  creation_date = types::date(parsed_task[0]);
-  expire_date = types::date(parsed_task[1]);
-  tags = logic::splitString(parsed_task[2], task_field_inner_delimiter);
-  categories = logic::splitString(parsed_task[3], task_field_inner_delimiter);
-  vector_text = vector<string>(parsed_task.begin() + 4, parsed_task.end() - 1);
-  is_active = (parsed_task[parsed_task.size() - 1] == "1") ? true : false;
-  text = logic::joinString(vector_text);
+  types::date creation_date(parsed_task[0]);
+  types::date expire_date(parsed_task[1]);
+  vector<string> tags{
+      logic::splitString(parsed_task[2], task_field_inner_delimiter)};
+  vector<string> categories{
+      logic::splitString(parsed_task[3], task_field_inner_delimiter)};
+  vector<string> vector_text{
+      vector<string>(parsed_task.begin() + 4, parsed_task.end() - 1)};
+  string text{logic::joinString(vector_text)};
+  bool is_active{(parsed_task[parsed_task.size() - 1] == "1") ? true : false};
 
   setPriority(apriority);
   _task.creation_date = creation_date;
@@ -58,7 +53,7 @@ Task::Task(string ataskline, unsigned apriority) : _task{} {
   setCategories(categories);
   setActive(is_active);
   setText(text);
-}
+} // namespace tasks
 
 vector<string> Task::_validate_and_pass(string atask) {
   size_t active_start_pos{atask.find(task_start_point_active)};
@@ -108,13 +103,20 @@ string Task::toFileString() {
 
 string Task::toString(string delimiter) {
   string result = to_string(_task.id + 1) + delimiter;
+  if (_task.is_active) {
+    if (_task.expire_date < _task.expire_date.today()) {
+      result += "[EXPIRED] ";
+    } else if (_task.expire_date == _task.expire_date.today()) {
+      result += "[DEADLINE] ";
+    }
+  }
   result += _task.text + delimiter;
   result += _task.expire_date.toString() + delimiter;
   result += logic::joinString(_task.tags, ",") + delimiter;
   result += logic::joinString(_task.categories, ",") + delimiter;
 
   return result;
-}
+} // namespace tasks
 
 // getters
 types::task Task::getTask() { return _task; }

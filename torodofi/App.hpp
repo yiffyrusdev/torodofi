@@ -75,7 +75,6 @@ protected:
   std::string _chooseText(std::string acaption, std::string atext);
 
   template <typename T>
-  // Sultiple choice
   T _chooseFromVector(std::vector<T> avector, std::string acaption);
 
 public:

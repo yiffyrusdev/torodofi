@@ -10,9 +10,7 @@ TaskContainer::TaskContainer()
     : _tasks_active{}, _tasks_done{},
       _categories{no_category}, _tags{no_tag}, _filename{} {}
 
-TaskContainer::TaskContainer(string afilename)
-    : _tasks_active{}, _tasks_done{},
-      _categories{no_category}, _tags{no_tag}, _filename{} {
+TaskContainer::TaskContainer(string afilename) : TaskContainer() {
   readFile(afilename);
 }
 

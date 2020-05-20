@@ -116,13 +116,11 @@ void App::Start() {
 void App::_exit() { _objTasks.Dump(); }
 
 types::returnstatus App::_showTasks(bool is_active) {
-  vector<tasks::Task> tasks;
+  vector<tasks::Task> tasks{_objTasks.getTasks(is_active)};
   size_t prio_offset{0}; // any_menu_actions.size(); // FIXME
   types::returnstatus status{};
   string cmd, prompt, caption;
   vector<string> high_priorities, medi_priorities, vstmp;
-
-  tasks = _objTasks.getTasks(is_active);
 
   for (size_t t = 0; t < tasks.size(); t++) {
     switch (tasks[t].getPriority()) {
@@ -153,11 +151,9 @@ types::returnstatus App::_showTasks(bool is_active) {
 }
 
 types::returnstatus App::_showOneTask(unsigned aid, bool is_active) {
-  vector<tasks::Task> tasks;
+  vector<tasks::Task> tasks{_objTasks.getTasks(is_active)};
   types::returnstatus status{};
   string cmd;
-
-  tasks = _objTasks.getTasks(is_active);
 
   cmd = _task_based_menu(tasks[aid], one_task_actions, false, kb_selections);
   status = logic::execCommand(cmd);
@@ -308,7 +304,6 @@ vector<string> App::_chooseCategories(string acaption) {
 }
 
 template <typename T>
-//
 T App::_chooseFromVector(vector<T> avector, string acaption) {
   string options, cmd;
   vector<string> svector;

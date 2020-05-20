@@ -22,7 +22,6 @@ date::date(string yyyymmdd)
 date::date(unsigned year, unsigned month, unsigned day)
     : _gnudate{}, _year{}, _month{}, _day{}, _bissextile{false} {
   bool passed;
-  vector<string> parsed{to_string(year), to_string(month), to_string(day)};
 
   passed = _validate_and_pass(year, month, day);
   if (!passed) {

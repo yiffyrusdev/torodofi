@@ -30,14 +30,14 @@ You can take contents and config examples from **example.cfg**. In this file, yo
 
 ## Installation
 
+> ArchLinux-based users! There is a package in the AUR =)
+
 Run
 ```bash
 cmake .
 cmake --build .
 ```
 Then put torodofi executable to PATH.
-
-> Arch Linux users! There is a package in the AUR =)
 
 ## Features
 - [x] Tags and categories for tasks
