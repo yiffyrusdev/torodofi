@@ -57,7 +57,7 @@ protected:
                                   std::string aprompt, bool any_menu = true,
                                   std::string custom_rofi_keys = "");
   // Show rofi window with active tasks list
-  // return selected fiels string
+  // return selected fields string
   types::returnstatus _showTasks(bool is_active);
   // Show rofi window with one Task information
   // return selected action string

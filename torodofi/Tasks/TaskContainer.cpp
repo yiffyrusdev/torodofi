@@ -15,7 +15,7 @@ TaskContainer::TaskContainer(string afilename) : TaskContainer() {
 }
 
 void TaskContainer::Dump(std::string afilename) {
-  if (afilename == "") {
+  if (afilename.empty()) {
     afilename = _filename;
   }
   unsigned priority;
@@ -32,8 +32,8 @@ void TaskContainer::Dump(std::string afilename) {
     for (size_t v = 0; v < tasks.size(); v++) {
       file << endl << h1_captions[v];
       priority = 0;
-      for (size_t t = 0; t < (*tasks[v]).size(); t++) {
-        cmptask = (*tasks[v])[t];
+      for (auto & t : (*tasks[v])) {
+        cmptask = t;
         if (cmptask.getTask().priority != priority) {
           priority = cmptask.getTask().priority;
           file << endl << priority_start_point + to_string(priority) << endl;
@@ -110,9 +110,9 @@ void TaskContainer::addCategory(string acat) {
 
 void TaskContainer::addCategory(vector<string> acats) {
   if (acats.size() > 0) {
-    for (size_t i = 0; i < acats.size(); i++) {
-      if (acats[i] != empty_category) {
-        addCategory(acats[i]);
+    for (auto & acat : acats) {
+      if (acat != empty_category) {
+        addCategory(acat);
       }
     }
   }
@@ -126,9 +126,9 @@ void TaskContainer::addTag(string atag) {
 
 void TaskContainer::addTag(vector<string> atags) {
   if (atags.size() > 0) {
-    for (size_t i = 0; i < atags.size(); i++) {
-      if (atags[i] != empty_tag) {
-        addTag(atags[i]);
+    for (auto & atag : atags) {
+      if (atag != empty_tag) {
+        addTag(atag);
       }
     }
   }
@@ -140,8 +140,8 @@ vector<string> TaskContainer::toString(bool is_active, string delimiter) {
   string result;
 
   if ((*tasks).size() > 0) {
-    for (size_t t = 0; t < (*tasks).size(); t++) {
-      vsresult.push_back((*tasks)[t].toString());
+    for (auto & t : (*tasks)) {
+      vsresult.push_back(t.toString());
     }
     result = logic::joinString(vsresult, delimiter);
     result = logic::linuxColumns(result);
@@ -163,11 +163,11 @@ void TaskContainer::refreshActiveDone() {
   _tasks_active.clear();
   _tasks_done.clear();
 
-  for (size_t i = 0; i < tasks.size(); i++) {
-    if (tasks[i].getActive()) {
-      _tasks_active.push_back(tasks[i]);
+  for (auto & task : tasks) {
+    if (task.getActive()) {
+      _tasks_active.push_back(task);
     } else {
-      _tasks_done.push_back(tasks[i]);
+      _tasks_done.push_back(task);
     }
   }
 }
@@ -176,10 +176,10 @@ void TaskContainer::refreshActiveDone() {
 void TaskContainer::_sort_priority() {
   vector<Task> *alltasks[2]{&_tasks_active, &_tasks_done};
 
-  for (size_t v = 0; v < (sizeof(alltasks) / sizeof(*alltasks)); v++) {
-    sort((*alltasks[v]).begin(), (*alltasks[v]).end(), cmp_prioroty);
-    for (size_t i = 0; i < (*alltasks[v]).size(); i++) {
-      (*alltasks[v])[i]._setId(i);
+  for (auto & alltask : alltasks) {
+    sort((*alltask).begin(), (*alltask).end(), cmp_prioroty);
+    for (size_t i = 0; i < (*alltask).size(); i++) {
+      (*alltask)[i]._setId(i);
     }
   }
 }

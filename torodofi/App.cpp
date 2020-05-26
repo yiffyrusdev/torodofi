@@ -65,22 +65,21 @@ void App::Start() {
       if (choice == menu_back) {
         showtasks = false;
       } else {
-        // Is it an ungly hack after deleting "< Back" option?
+        // Is it an ugly hack after deleting "< Back" option?
         // Look after "-1"!!!!
         choice_id = atoi(logic::splitString(choice)[0].c_str()) - 1;
         showtask = true;
       }
 
       while (showtask) {
+        showtask = false;
         status = _showOneTask(choice_id, showtasks_active);
         if (status.code == 256) {
-          showtask = false;
           continue;
         }
         if (status.output.length() <= 1) {
           continue;
         }
-        showtask = false;
         choice = status.output;
         choice = choice.substr(0, choice.length() - 1); // remove \n symbol
         if (choice == menu_back) {
@@ -122,14 +121,14 @@ types::returnstatus App::_showTasks(bool is_active) {
   string cmd, prompt, caption;
   vector<string> high_priorities, medi_priorities, vstmp;
 
-  for (size_t t = 0; t < tasks.size(); t++) {
-    switch (tasks[t].getPriority()) {
+  for (auto & task : tasks) {
+    switch (task.getPriority()) {
     case 1:
       high_priorities.push_back(
-          to_string(tasks[t].getId() + prio_offset)); // FIXME WRONG COLORING
+          to_string(task.getId() + prio_offset)); // FIXME WRONG COLORING
       break;
     case 2:
-      medi_priorities.push_back(to_string(tasks[t].getId() + prio_offset));
+      medi_priorities.push_back(to_string(task.getId() + prio_offset));
       break;
     }
   }
@@ -139,10 +138,10 @@ types::returnstatus App::_showTasks(bool is_active) {
   cmd = _caption_based_menu(caption, vstmp[1], prompt, false,
                             kb_customs + kb_selections) +
         " ";
-  if (high_priorities.size() > 0) {
+  if (!high_priorities.empty()) {
     cmd += "-u " + logic::joinString(high_priorities, ",") + " ";
   }
-  if (medi_priorities.size() > 0) {
+  if (!medi_priorities.empty()) {
     cmd += "-a " + logic::joinString(medi_priorities, ",") + " ";
   }
   status = logic::execCommand(cmd);
@@ -198,7 +197,7 @@ void App::_editTask(unsigned aid, bool is_active) {
     caption += msg0;
 
     vstmp = _chooseTags(caption);
-    if (vstmp.size() > 0) {
+    if (!vstmp.empty()) {
       task->setTags(vstmp);
     }
 
@@ -209,7 +208,7 @@ void App::_editTask(unsigned aid, bool is_active) {
     caption += msg0;
 
     vstmp = _chooseCategories(caption);
-    if (vstmp.size() > 0) {
+    if (!vstmp.empty()) {
       task->setCategories(vstmp);
     }
 
@@ -243,8 +242,8 @@ types::date App::_chooseDate(std::string acaption, types::date adate) {
   types::returnstatus status{};
   types::date date_choice;
 
-  for (size_t d = 0; d < possible_d.size(); d++) {
-    possible_s.push_back(possible_d[d].toString());
+  for (auto & d : possible_d) {
+    possible_s.push_back(d.toString());
   }
   options = logic::joinString(possible_s, rofi_options_delimiter);
   cmd = _caption_based_menu(acaption, options, "", false);
@@ -341,7 +340,7 @@ string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
   };
 
   cmd += "echo -e \"";
-  if (any_menu && any_menu_actions.size() > 0) {
+  if (any_menu && !any_menu_actions.empty()) {
     cmd += logic::joinString(any_menu_actions, rofi_options_delimiter) +
            rofi_options_delimiter;
   }
@@ -364,7 +363,7 @@ string App::_caption_based_menu(string acaption, string add_menu,
   string cmd;
 
   cmd = "echo -e \"";
-  if (any_menu && any_menu_actions.size() > 0) {
+  if (any_menu && !any_menu_actions.empty()) {
     cmd += logic::joinString(any_menu_actions, rofi_options_delimiter) +
            rofi_options_delimiter;
   }

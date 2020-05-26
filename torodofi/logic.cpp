@@ -29,7 +29,7 @@ vector<string> splitString(string astring, string delimiter) {
 string joinString(vector<string> avector, string delimiter) {
   string result;
 
-  if (avector.size() > 0) {
+  if (!avector.empty()) {
     for (size_t s = 0; s < avector.size() - 1; s++) {
       result += avector[s] + delimiter;
     }
@@ -61,7 +61,7 @@ types::returnstatus execCommand(string acommand) {
   }
 
   while (!feof(pipe)) {
-    if (fgets(buffer, 128, pipe) != NULL)
+    if (fgets(buffer, 128, pipe) != nullptr)
       result.output += buffer;
   }
 

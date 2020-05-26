@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <string>
 
 #include "torodofi/App.hpp"
@@ -9,7 +8,6 @@ int main(int argc, char *argv[]) {
   string homedir;
 
   toro::app::App Application("");
-
   Application.Start();
 
   return 0;
