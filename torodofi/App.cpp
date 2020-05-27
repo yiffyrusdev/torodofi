@@ -238,7 +238,7 @@ string App::_chooseText(string acaption, string atext) {
 }
 
 types::date App::_chooseDate(std::string acaption, types::date adate) {
-  vector<types::date> possible_d{adate.vectorAfter(730)};
+  vector<types::date> possible_d{adate.today().vectorAfter(730)};
   vector<string> possible_s;
   string options, cmd, choice;
   types::returnstatus status{};
