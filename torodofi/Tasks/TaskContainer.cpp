@@ -24,7 +24,7 @@ void TaskContainer::Dump(std::string afilename) {
   vector<string> h1_captions;
   ofstream file(afilename);
 
-  _sort_priority();
+  sortByPriority();
   tasks = {&_tasks_active, &_tasks_done};
   h1_captions = {"# Active Tasks", "# Done Tasks"};
 
@@ -89,7 +89,7 @@ void TaskContainer::addTask(Task atask) {
   } else { // got Done task
     _tasks_done.push_back(atask);
   }
-  _sort_priority();
+  sortByPriority();
 }
 
 void TaskContainer::delTask(size_t aid, bool is_active) {
@@ -134,12 +134,15 @@ void TaskContainer::addTag(vector<string> atags) {
   }
 }
 
-vector<string> TaskContainer::toString(bool is_active, string delimiter) {
+vector<string> TaskContainer::toString(bool is_active, bool reversed, string delimiter) {
   vector<string> vsresult{"ID\tTask\tDeadline\tTags\tCategories"};
   vector<Task> *tasks = (is_active) ? &_tasks_active : &_tasks_done;
   string result;
 
-  if ((*tasks).size() > 0) {
+  if (reversed){
+    reverse((*tasks).begin(), (*tasks).end());
+  }
+  if (!(*tasks).empty()) {
     for (auto & t : (*tasks)) {
       vsresult.push_back(t.toString());
     }
@@ -154,7 +157,14 @@ vector<string> TaskContainer::toString(bool is_active, string delimiter) {
   return vsresult;
 }
 
-void TaskContainer::sortByPriority() { _sort_priority(); }
+void TaskContainer::sortByPriority(bool is_active) {
+  _sort_priority((is_active) ? _tasks_active : _tasks_done);
+}
+
+void TaskContainer::resetIds(){
+  _reset_id(_tasks_active);
+  _reset_id(_tasks_done);
+}
 
 void TaskContainer::refreshActiveDone() {
   vector<Task> tasks{_tasks_active};
@@ -173,14 +183,13 @@ void TaskContainer::refreshActiveDone() {
 }
 
 // protected
-void TaskContainer::_sort_priority() {
-  vector<Task> *alltasks[2]{&_tasks_active, &_tasks_done};
+void TaskContainer::_sort_priority(vector<Task> &tasks) {
+  sort(tasks.begin(), tasks.end(), cmp_prioroty);
+}
 
-  for (auto & alltask : alltasks) {
-    sort((*alltask).begin(), (*alltask).end(), cmp_prioroty);
-    for (size_t i = 0; i < (*alltask).size(); i++) {
-      (*alltask)[i]._setId(i);
-    }
+void TaskContainer::_reset_id(vector<Task> &tasks){
+  for (size_t i = 0; i < tasks.size(); i++) {
+    tasks[i]._setId(i);
   }
 }
 
@@ -189,8 +198,11 @@ vector<string> TaskContainer::getTags() { return _tags; }
 
 vector<string> TaskContainer::getCategories() { return _categories; }
 
-vector<Task> TaskContainer::getTasks(bool is_active) {
+vector<Task> TaskContainer::getTasks(bool is_active, bool reversed) {
   vector<Task> tasks = (is_active) ? _tasks_active : _tasks_done;
+  if (reversed){
+    reverse(tasks.begin(), tasks.end());
+  }
   return tasks;
 }
 

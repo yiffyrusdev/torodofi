@@ -38,7 +38,9 @@ void App::Start() {
   unsigned new_prioroty;
 
   while (showtasks) {
-    _objTasks.sortByPriority();
+    _objTasks.sortByPriority(true);
+    _objTasks.sortByPriority(false);
+    _objTasks.resetIds();
     status = _showTasks(showtasks_active);
     switch (status.code) {
     case 3072: // kb-custom-1

@@ -5,8 +5,6 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  string homedir;
-
   toro::app::App Application("");
   Application.Start();
 
