@@ -27,10 +27,10 @@ public:
   // Constructor
   Config();
   // Constructor gets file name to read config from it
-  Config(std::string afilename);
+  Config(const std::string &afilename);
 
   // Read configuration from afilename
-  void readFile(std::string afilename);
+  void readFile(const std::string& afilename);
 
   // Getters
   types::config getConfig();

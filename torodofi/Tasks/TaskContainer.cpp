@@ -10,7 +10,7 @@ TaskContainer::TaskContainer()
     : _tasks_active{}, _tasks_done{},
       _categories{no_category}, _tags{no_tag}, _filename{} {}
 
-TaskContainer::TaskContainer(string afilename) : TaskContainer() {
+TaskContainer::TaskContainer(const string& afilename) : TaskContainer() {
   readFile(afilename);
 }
 
@@ -47,7 +47,7 @@ void TaskContainer::Dump(std::string afilename) {
   }
 }
 
-void TaskContainer::readFile(string afilename) {
+void TaskContainer::readFile(const string& afilename) {
   size_t pri_del_len{priority_start_point.length()};
   string line;
   unsigned priority;
@@ -81,7 +81,7 @@ void TaskContainer::addTask(string atext, types::date expire,
   addTask(new_task);
 }
 
-void TaskContainer::addTask(Task atask) {
+void TaskContainer::addTask(const Task& atask) {
   addTag(atask.getTags());
   addCategory(atask.getCategories());
   if (atask.getActive()) { // got Active task
@@ -102,13 +102,13 @@ void TaskContainer::delTask(size_t aid, bool is_active) {
   }
 }
 
-void TaskContainer::addCategory(string acat) {
+void TaskContainer::addCategory(const string& acat) {
   if (find(_categories.begin(), _categories.end(), acat) == _categories.end()) {
     _categories.push_back(acat);
   }
 }
 
-void TaskContainer::addCategory(vector<string> acats) {
+void TaskContainer::addCategory(const vector<string>& acats) {
   if (acats.size() > 0) {
     for (auto & acat : acats) {
       if (acat != empty_category) {
@@ -118,13 +118,13 @@ void TaskContainer::addCategory(vector<string> acats) {
   }
 }
 
-void TaskContainer::addTag(string atag) {
+void TaskContainer::addTag(const string& atag) {
   if (find(_tags.begin(), _tags.end(), atag) == _tags.end()) {
     _tags.push_back(atag);
   }
 }
 
-void TaskContainer::addTag(vector<string> atags) {
+void TaskContainer::addTag(const vector<string>& atags) {
   if (atags.size() > 0) {
     for (auto & atag : atags) {
       if (atag != empty_tag) {
@@ -134,7 +134,7 @@ void TaskContainer::addTag(vector<string> atags) {
   }
 }
 
-vector<string> TaskContainer::toString(bool is_active, bool reversed, string delimiter) {
+vector<string> TaskContainer::toString(bool is_active, bool reversed, const string& delimiter) {
   vector<string> vsresult{"ID\tTask\tDeadline\tTags\tCategories"};
   vector<Task> *tasks = (is_active) ? &_tasks_active : &_tasks_done;
   string result;

@@ -44,18 +44,18 @@ protected:
 
   void _exit();
   // Read configuration file
-  void _readConfig(std::string afilename);
+  void _readConfig(const std::string& afilename);
   // Read .md file with tasks
-  void _readTasks(std::string afilename);
+  void _readTasks(const std::string& afilename);
 
   // Compose cmdline for task-base menus
   std::string _task_based_menu(tasks::Task atask,
                                std::vector<std::string> add_menu,
                                bool any_menu = true,
-                               std::string custom_rofi_keys = "");
-  std::string _caption_based_menu(std::string acaption, std::string add_menu,
-                                  std::string aprompt, bool any_menu = true,
-                                  std::string custom_rofi_keys = "");
+                               const std::string& custom_rofi_keys = "");
+  std::string _caption_based_menu(const std::string& acaption, const std::string& add_menu,
+                                  const std::string& aprompt, bool any_menu = true,
+                                  const std::string& custom_rofi_keys = "");
   // Show rofi window with active tasks list
   // return selected fields string
   types::returnstatus _showTasks(bool is_active);
@@ -65,17 +65,17 @@ protected:
   // Edit selected by id task
   void _editTask(unsigned aid, bool is_active);
   // Choose Tags
-  std::vector<std::string> _chooseTags(std::string acaption);
+  std::vector<std::string> _chooseTags(const std::string& acaption);
   // Choose Categories
-  std::vector<std::string> _chooseCategories(std::string acaption);
+  std::vector<std::string> _chooseCategories(const std::string& acaption);
   // Choose date
-  types::date _chooseDate(std::string acaption,
+  types::date _chooseDate(const std::string& acaption,
                           types::date adate = types::date());
   // Input text
-  std::string _chooseText(std::string acaption, std::string atext);
+  std::string _chooseText(const std::string& acaption, const std::string& atext);
 
   template <typename T>
-  T _chooseFromVector(std::vector<T> avector, std::string acaption);
+  T _chooseFromVector(std::vector<T> avector, const std::string& acaption);
 
 public:
   // Constructor

@@ -55,7 +55,7 @@ Task::Task(string ataskline, unsigned apriority) : _task{} {
   setText(text);
 } // namespace tasks
 
-vector<string> Task::_validate_and_pass(string atask) {
+vector<string> Task::_validate_and_pass(const string& atask) {
   size_t active_start_pos{atask.find(task_start_point_active)};
   size_t done_start_pos{atask.find(task_start_point_done)};
   size_t start_pos{string::npos};
@@ -101,7 +101,7 @@ string Task::toFileString() {
   return start_point + logic::joinString(vectorized, task_field_delimiter);
 }
 
-string Task::toString(string delimiter) {
+string Task::toString(const string& delimiter) {
   string result = to_string(_task.id + 1) + delimiter;
   if (_task.is_active) {
     if (_task.expire_date < _task.expire_date.today()) {
@@ -120,14 +120,14 @@ string Task::toString(string delimiter) {
 
 // getters
 types::task Task::getTask() { return _task; }
-unsigned Task::getPriority() { return _task.priority; }
-unsigned Task::getId() { return _task.id; }
-bool Task::getActive() { return _task.is_active; }
-std::string Task::getText() { return _task.text; }
-types::date Task::getCreation() { return _task.creation_date; }
-types::date Task::getExpire() { return _task.expire_date; }
-std::vector<std::string> Task::getTags() { return _task.tags; }
-std::vector<std::string> Task::getCategories() { return _task.categories; }
+unsigned Task::getPriority() const { return _task.priority; }
+unsigned Task::getId() const { return _task.id; }
+bool Task::getActive() const { return _task.is_active; }
+std::string Task::getText() const { return _task.text; }
+types::date Task::getCreation() const { return _task.creation_date; }
+types::date Task::getExpire() const { return _task.expire_date; }
+std::vector<std::string> Task::getTags() const { return _task.tags; }
+std::vector<std::string> Task::getCategories() const { return _task.categories; }
 // setters
 void Task::setActive(bool is_active) { _task.is_active = is_active; }
 void Task::_setId(unsigned int aid) { _task.id = aid; }
@@ -137,8 +137,8 @@ void Task::setExpire(types::date adate) {
     _task.expire_date = adate;
   }
 }
-void Task::setTags(std::vector<std::string> atags) {
-  if (atags.size() > 0) {
+void Task::setTags(const std::vector<std::string>& atags) {
+  if (!atags.empty()) {
     _task.tags = atags;
   } else {
     _task.tags = vector<string>() = {empty_tag};

@@ -16,7 +16,7 @@ protected:
   unsigned short _day;
   bool _bissextile;
   // constructor internals
-  void _real_constructor(std::string yyyymmdd);
+  void _real_constructor(const std::string& yyyymmdd);
   // Check if date valid and pass values to members
   bool _validate_and_pass(unsigned short yyyy, unsigned short mm,
                           unsigned short dd);
@@ -29,7 +29,7 @@ public:
   // Empty constructor
   date();
   // 2020-05-11 GNU date format
-  date(std::string yyyy_mm_dd_date);
+  date(const std::string& yyyy_mm_dd_date);
   // 2020,05,11 integers
   date(unsigned year, unsigned month, unsigned day);
 
@@ -39,30 +39,30 @@ public:
   std::vector<date> vectorAfter(size_t acount);
 
   // Return todays date
-  date today();
+  static date today();
   // Return GNU date String value
   std::string toString();
   // return constant str like string::c_str()
   const char *c_str() const;
 
   // getters
-  unsigned short getYear();
-  unsigned short getMonth();
-  unsigned short getDay();
+  unsigned short getYear() const;
+  unsigned short getMonth() const;
+  unsigned short getDay() const;
 
   // Operators
   // do NOT add more than 14 days
   date operator+(unsigned short adays);
   // do NOT add more than 14 days
   date operator-(unsigned short adays);
-  date &operator=(std::string gnudate);
+  date &operator=(const std::string& gnudate);
 
-  bool operator==(const date &two);
-  bool operator>(const date &two);
-  bool operator<(const date &two);
-  bool operator>=(const date &two);
-  bool operator<=(const date &two);
-  bool operator!=(const date &two);
+  bool operator==(const date &two) const;
+  bool operator>(const date &two) const;
+  bool operator<(const date &two) const;
+  bool operator>=(const date &two) const;
+  bool operator<=(const date &two) const;
+  bool operator!=(const date &two) const;
 };
 
 // return code & stdoutput type
@@ -78,8 +78,9 @@ struct keysset {                 // hotkeys
   std::string kb_new_task;       // add new task
   std::string kb_index_modofier; // modifier to choose element by index
 };
-struct execset {    // executable commands
-  std::string rofi; // rofi GUI command
+struct execset {          // executable commands
+  std::string rofi;       // rofi GUI command
+  std::string urlhandler; // where to open urls
 };
 struct pathset {        // pathes of files to read
   std::string taskfile; // path to .md file with tasks
@@ -101,6 +102,7 @@ struct task {
   types::date expire_date;             // deadline date
   std::vector<std::string> tags;       // marked with tags
   std::vector<std::string> categories; // exist in categories
+  std::string url;                     // url assigned with task
   std::string text;                    // task description
 };
 

@@ -27,7 +27,7 @@ protected:
   types::task _task;
 
   // check either given string is a task determination or not
-  std::vector<std::string> _validate_and_pass(std::string teststring);
+  std::vector<std::string> _validate_and_pass(const std::string& teststring);
 
 public:
   Task();
@@ -42,23 +42,23 @@ public:
   std::string toFileString();
   // Repr task as human-readable formatted string
   // id\t text\t expire_date\t tags\t categories
-  std::string toString(std::string delimiter = "\t");
+  std::string toString(const std::string& delimiter = "\t");
   // getters
   types::task getTask();
-  unsigned getPriority();
-  unsigned getId();
-  bool getActive();
-  std::string getText();
-  types::date getCreation();
-  types::date getExpire();
-  std::vector<std::string> getTags();
-  std::vector<std::string> getCategories();
+  unsigned getPriority() const;
+  unsigned getId() const;
+  bool getActive() const;
+  std::string getText() const;
+  types::date getCreation() const;
+  types::date getExpire() const;
+  std::vector<std::string> getTags() const;
+  std::vector<std::string> getCategories() const;
   // setters
   void setActive(bool is_active);
   void _setId(unsigned aid); // Do not use it if you are not me =)
   void setPriority(unsigned apriority);
   void setExpire(types::date adate);
-  void setTags(std::vector<std::string> atags);
+  void setTags(const std::vector<std::string>& atags);
   void setCategories(std::vector<std::string> acategories);
   void setText(std::string atext);
 };

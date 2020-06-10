@@ -9,6 +9,7 @@ namespace config {
 void Config::_Config() {
   _config.exec.rofi =
       "rofi  -tokenize -i -lines 30 -width 1500 -theme Arc-Dark";
+  _config.exec.urlhandler = "firefox";
   _config.keys.kb_active_done = "Alt+Tab";
   _config.keys.kb_new_task = "Alt+n";
   _config.keys.kb_task_agenda = "Alt+a";
@@ -16,13 +17,13 @@ void Config::_Config() {
   _config.path.taskfile = home_directory + "/example.md";
 }
 Config::Config() : _config{}, _filename{} { _Config(); }
-Config::Config(string afilename) : _config{}, _filename{} {
+Config::Config(const string& afilename) : _config{}, _filename{} {
   _Config();
   readFile(afilename);
 }
 
 // Config public
-void Config::readFile(string afilename) {
+void Config::readFile(const string& afilename) {
   string line;
   ifstream file(afilename);
 
@@ -58,6 +59,8 @@ void Config::_validate_and_pass_line(string aline) {
       _config.keys.kb_index_modofier = val;
     } else if (var == "rofi") {
       _config.exec.rofi = val;
+    } else if (var == "urlhandler") {
+      _config.exec.urlhandler = val;
     } else if (var == "taskfile") {
       _config.path.taskfile = val;
     }

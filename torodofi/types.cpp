@@ -14,7 +14,7 @@ date::date() : _gnudate{}, _year{}, _month{}, _day{}, _bissextile{false} {
   _validate_and_pass(today.getYear(), today.getMonth(), today.getDay());
 }
 
-date::date(string yyyymmdd)
+date::date(const string& yyyymmdd)
     : _gnudate{}, _year{}, _month{}, _day{}, _bissextile{false} {
   _real_constructor(yyyymmdd);
 }
@@ -30,7 +30,7 @@ date::date(unsigned year, unsigned month, unsigned day)
   }
 }
 
-void date::_real_constructor(string yyyymmdd) {
+void date::_real_constructor(const string& yyyymmdd) {
   unsigned short yyyy;
   unsigned short mm;
   unsigned short dd;
@@ -129,9 +129,9 @@ string date::toString() { return _gnudate; }
 const char *date::c_str() const { return _gnudate.c_str(); }
 
 // getters
-unsigned short date::getYear() { return _year; }
-unsigned short date::getMonth() { return _month; }
-unsigned short date::getDay() { return _day; }
+unsigned short date::getYear() const { return _year; }
+unsigned short date::getMonth() const { return _month; }
+unsigned short date::getDay() const { return _day; }
 
 // Operators
 date date::operator+(unsigned short adays) {
@@ -173,14 +173,14 @@ date date::operator-(unsigned short adays) {
   return date(years, months, days);
 }
 
-bool date::operator==(const date &two) {
+bool date::operator==(const date &two) const {
   bool eq = this->_year == two._year;
   eq = eq && this->_month == two._month;
   eq = eq && this->_day == two._day;
   return eq;
 }
 
-bool date::operator>(const date &two) {
+bool date::operator>(const date &two) const {
   bool isgreater{false};
 
   if (this->_year > two._year) {
@@ -202,19 +202,19 @@ bool date::operator>(const date &two) {
   return isgreater;
 }
 
-bool date::operator!=(const date &two) { return !(*this == two); }
+bool date::operator!=(const date &two) const { return !(*this == two); }
 
-bool date::operator<(const date &two) {
+bool date::operator<(const date &two) const {
   return (*this != two) && !(*this > two);
 }
-bool date::operator>=(const date &two) {
-  return (*this > two) || (*this > two);
+bool date::operator>=(const date &two) const {
+  return (*this == two) || (*this > two);
 }
-bool date::operator<=(const date &two) {
+bool date::operator<=(const date &two) const {
   return (*this < two) || (*this == two);
 }
 
-date &date::operator=(string gnudate) {
+date &date::operator=(const string& gnudate) {
   _real_constructor(gnudate);
   return *this;
 }

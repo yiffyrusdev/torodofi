@@ -35,29 +35,29 @@ public:
   // ## 2
   // ......
   // ## (x) means (x) priority of listed tasks
-  TaskContainer(std::string afilename);
+  TaskContainer(const std::string& afilename);
   // Read tasks file
-  void readFile(std::string afilename);
+  void readFile(const std::string& afilename);
   // Dump task to a file back
   void Dump(std::string afilename = "");
   // Add new task
   void addTask(std::string atext, types::date expire,
                std::vector<std::string> atags,
                std::vector<std::string> acategories, unsigned apriority);
-  void addTask(Task atask);
+  void addTask(const Task& atask);
   // Delete task by id
   void delTask(size_t aid, bool is_active);
   // Add new category
-  void addCategory(std::string acat);
-  void addCategory(std::vector<std::string> acats);
+  void addCategory(const std::string& acat);
+  void addCategory(const std::vector<std::string>& acats);
   // Add new tag
-  void addTag(std::string atag);
-  void addTag(std::vector<std::string> atags);
+  void addTag(const std::string& atag);
+  void addTag(const std::vector<std::string>& atags);
   // Repr task container as formatted string with delimiter
   // Return choosen active/done list.
   // Return vector {fields caption, fields}
   std::vector<std::string>
-  toString(bool is_active, bool reversed=false, std::string delimiter = string_repr_delimiter);
+  toString(bool is_active, bool reversed=false, const std::string& delimiter = string_repr_delimiter);
 
   // sort tasks by priority
   void sortByPriority(bool is_active=true);

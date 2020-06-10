@@ -5,7 +5,7 @@ using namespace std;
 namespace toro {
 namespace logic {
 
-vector<string> splitString(string astring, string delimiter) {
+vector<string> splitString(string astring, const string& delimiter) {
   vector<string> result;
   size_t pos;
 
@@ -26,20 +26,20 @@ vector<string> splitString(string astring, string delimiter) {
   return result;
 }
 
-string joinString(vector<string> avector, string delimiter) {
+string joinString(vector<string> avector, const string& delimiter) {
   string result;
 
   if (!avector.empty()) {
     for (size_t s = 0; s < avector.size() - 1; s++) {
       result += avector[s] + delimiter;
     }
-    result += avector[avector.size() - 1].c_str();
+    result += avector[avector.size() - 1];
   }
 
   return result;
 }
 
-string linuxColumns(string astring, string delimiter) {
+string linuxColumns(const string& astring, const string& delimiter) {
   string cmd;
   cmd = "echo -e \"" + astring + "\" ";
   cmd += "| column -s $'" + delimiter + "' -t";
@@ -47,7 +47,7 @@ string linuxColumns(string astring, string delimiter) {
   return status.output;
 }
 
-types::returnstatus execCommand(string acommand) {
+types::returnstatus execCommand(const string& acommand) {
   char buffer[128];
   types::returnstatus result{};
 
@@ -57,7 +57,7 @@ types::returnstatus execCommand(string acommand) {
     // result.code = 404;
     // return result;
     printf("execCommand: string acommand: %s\n", acommand.c_str());
-    throw std::invalid_argument("Incorrect command or PIPE error");
+    //throw std::invalid_argument("Incorrect command or PIPE error");
   }
 
   while (!feof(pipe)) {

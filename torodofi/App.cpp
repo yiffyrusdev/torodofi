@@ -1,5 +1,7 @@
 #include "App.hpp"
 
+#include <utility>
+
 using namespace std;
 
 namespace toro {
@@ -220,7 +222,7 @@ void App::_editTask(unsigned aid, bool is_active) {
   }
 }
 
-string App::_chooseText(string acaption, string atext) {
+string App::_chooseText(const string& acaption, const string& atext) {
   string cmd, choice;
   types::returnstatus status{};
 
@@ -237,13 +239,14 @@ string App::_chooseText(string acaption, string atext) {
   return choice;
 }
 
-types::date App::_chooseDate(std::string acaption, types::date adate) {
+types::date App::_chooseDate(const std::string& acaption, types::date adate) {
   vector<types::date> possible_d{adate.today().vectorAfter(730)};
   vector<string> possible_s;
   string options, cmd, choice;
   types::returnstatus status{};
   types::date date_choice;
 
+  possible_s.reserve(possible_d.size());
   for (auto & d : possible_d) {
     possible_s.push_back(d.toString());
   }
@@ -261,7 +264,7 @@ types::date App::_chooseDate(std::string acaption, types::date adate) {
   return date_choice;
 }
 
-vector<string> App::_chooseTags(string acaption) {
+vector<string> App::_chooseTags(const string& acaption) {
   string options, cmd, choice;
   types::returnstatus status{};
   vector<string> tags;
@@ -282,7 +285,7 @@ vector<string> App::_chooseTags(string acaption) {
   return tags;
 }
 
-vector<string> App::_chooseCategories(string acaption) {
+vector<string> App::_chooseCategories(const string& acaption) {
   string options, cmd, choice;
   vector<string> categories;
   types::returnstatus status{};
@@ -305,7 +308,7 @@ vector<string> App::_chooseCategories(string acaption) {
 }
 
 template <typename T>
-T App::_chooseFromVector(vector<T> avector, string acaption) {
+T App::_chooseFromVector(vector<T> avector, const string& acaption) {
   string options, cmd;
   vector<string> svector;
   T choice;
@@ -327,7 +330,7 @@ T App::_chooseFromVector(vector<T> avector, string acaption) {
 }
 
 string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
-                             bool any_menu, string custom_rofi_keys) {
+                             bool any_menu, const string& custom_rofi_keys) {
   types::config _config{_objConfig.getConfig()};
   string cmd;
   vector<string> caption;
@@ -346,7 +349,7 @@ string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
     cmd += logic::joinString(any_menu_actions, rofi_options_delimiter) +
            rofi_options_delimiter;
   }
-  cmd += logic::joinString(add_menu, rofi_options_delimiter) +
+  cmd += logic::joinString(std::move(add_menu), rofi_options_delimiter) +
          rofi_options_delimiter;
 
   cmd += "\" | ";
@@ -358,9 +361,9 @@ string App::_task_based_menu(tasks::Task atask, vector<string> add_menu,
   return cmd;
 }
 
-string App::_caption_based_menu(string acaption, string add_menu,
-                                string aprompt, bool any_menu,
-                                string custom_rofi_keys) {
+string App::_caption_based_menu(const string& acaption, const string& add_menu,
+                                const string& aprompt, bool any_menu,
+                                const string& custom_rofi_keys) {
   types::config _config{_objConfig.getConfig()};
   string cmd;
 
@@ -377,8 +380,9 @@ string App::_caption_based_menu(string acaption, string add_menu,
   return cmd;
 }
 
-void App::_readConfig(string afilename) {
+void App::_readConfig(const string& afilename) {
   ifstream file(afilename);
+
   if (!file.good()) {
     file.close();
     ofstream file(afilename);
@@ -420,7 +424,7 @@ void App::_readConfig(string afilename) {
   }
 }
 
-void App::_readTasks(string afilename) {
+void App::_readTasks(const string& afilename) {
   ifstream file(afilename);
   if (!file.good()) {
     file.close();
