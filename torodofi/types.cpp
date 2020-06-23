@@ -8,6 +8,8 @@ namespace types {
 
 // class date
 
+const string date::DATE_DELIMITER = "-";
+
 date::date() : _gnudate{}, _year{}, _month{}, _day{}, _bissextile{false} {
   date today{this->today()};
 
@@ -31,13 +33,14 @@ date::date(unsigned year, unsigned month, unsigned day)
 }
 
 void date::_real_constructor(const string& yyyymmdd) {
+  string msg;
   unsigned short yyyy;
   unsigned short mm;
   unsigned short dd;
   vector<string> parsed;
   bool passed;
 
-  parsed = logic::splitString(yyyymmdd, "-");
+  parsed = logic::splitString(yyyymmdd, DATE_DELIMITER);
   if (parsed.size() == 3) {
     yyyy = atoi(parsed[0].c_str());
     mm = atoi(parsed[1].c_str());
@@ -48,7 +51,7 @@ void date::_real_constructor(const string& yyyymmdd) {
       throw std::invalid_argument("Date must be a valid GNU date!");
     }
   } else {
-    printf("string yyyymmdd: %s", yyyymmdd.c_str());
+    printf("string yyyymmdd: %s\n", yyyymmdd.c_str());
     throw std::invalid_argument("Date must contain 3 fields");
   }
 }

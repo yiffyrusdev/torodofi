@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <stdio.h>
 
 namespace toro {
 namespace types {
@@ -26,6 +27,7 @@ protected:
                                         31, 31, 30, 31, 30, 31};
 
 public:
+  static const std::string DATE_DELIMITER;
   // Empty constructor
   date();
   // 2020-05-11 GNU date format

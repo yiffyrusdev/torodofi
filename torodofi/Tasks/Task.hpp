@@ -10,13 +10,13 @@
 namespace toro {
 namespace tasks {
 
-const std::string task_start_point_active = "- ";
-const std::string task_start_point_done = "+ ";
+const std::string task_start_point_active = "-[ ] ";
+const std::string task_start_point_done = "-[x] ";
 const std::string task_field_delimiter = " ";
 const std::string task_field_inner_delimiter = ",";
 
 const std::string no_tag = "---";       // Normal if no tags
-const std::string no_category = "---";  // Normal if no categoried
+const std::string no_category = "---";  // Normal if no categories
 const std::string empty_tag = ".";      // This is anomal tag! Caused by err
 const std::string empty_category = "."; // This is anomal tag! Caused by err
 
